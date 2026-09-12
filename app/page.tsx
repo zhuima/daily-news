@@ -28,7 +28,7 @@ const faq = [
   {
     question: "如何追踪某个公众号？",
     answer:
-      "访问 /accounts 查看已追踪公众号，并在 data/accounts.json 中维护列表；单篇正文抓取请使用 x-fetcher 的 fetch_wechat.py（单 URL，非公众号历史）。",
+      "访问 /accounts 在线添加或移除追踪公众号；单篇正文抓取请使用 x-fetcher 的 fetch_wechat.py（单 URL，非公众号历史）。",
   },
 ];
 

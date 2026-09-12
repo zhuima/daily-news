@@ -3,18 +3,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
 import { resolveArticleLink } from "@/lib/articles";
-import {
-  getArticlesByAccountSlug,
-  getTrackedAccount,
-} from "@/lib/data";
+import { getArticlesByAccountSlug, getTrackedAccount } from "@/lib/data";
 import { buildPageMetadata } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/accounts/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const account = getTrackedAccount(slug);
+  const account = await getTrackedAccount(slug);
   if (!account) return { title: "未找到公众号" };
   return buildPageMetadata({
     title: `${account.name} · 公众号文章`,
@@ -27,10 +26,10 @@ export default async function AccountDetailPage({
   params,
 }: PageProps<"/accounts/[slug]">) {
   const { slug } = await params;
-  const account = getTrackedAccount(slug);
+  const account = await getTrackedAccount(slug);
   if (!account) notFound();
 
-  const articles = getArticlesByAccountSlug(slug);
+  const articles = await getArticlesByAccountSlug(slug);
   const pageUrl = absoluteUrl(`/accounts/${slug}`);
 
   return (
@@ -55,7 +54,8 @@ export default async function AccountDetailPage({
       <header className="mt-6 max-w-3xl">
         <h1 className="text-4xl tracking-tight text-ink">{account.name}</h1>
         <p className="mt-3 text-sm text-muted">
-          {articles.length} 篇扫描条目 · 追踪始于 {account.addedAt}
+          {articles.length} 篇扫描条目 · 追踪始于{" "}
+          <time dateTime={account.addedAt}>{account.addedAt}</time>
         </p>
         {account.notes ? (
           <p className="mt-3 text-sm leading-7 text-ink/80">{account.notes}</p>
@@ -66,16 +66,11 @@ export default async function AccountDetailPage({
         <h2 className="text-base text-ink">下载正文（本地操作）</h2>
         <p className="mt-2 text-muted">
           x-fetcher 仅支持<strong className="text-ink">单篇 mp URL</strong>
-          ，不会抓取公众号历史。对下面已收录链接的文章，可在仓库根目录运行：
+          。对已收录链接运行：
         </p>
         <pre className="mt-3 overflow-x-auto rounded-sm bg-paper p-4 text-xs ring-1 ring-line">
 {`node scripts/download-account-bodies.mjs --account "${account.name}"`}
         </pre>
-        <p className="mt-2 text-muted">
-          输出目录：<code>data/downloads/{account.slug}/</code>。Vercel
-          静态站点不在云端执行抓取；也可 POST{" "}
-          <code>/api/fetch-body</code> 查看运行说明。
-        </p>
       </section>
 
       <section className="mt-10" aria-labelledby="account-articles-title">

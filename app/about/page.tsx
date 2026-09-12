@@ -97,7 +97,7 @@ export default function AboutPage() {
             <Link href="/accounts" className="text-marrs">
               /accounts
             </Link>
-            。x-fetcher 抓取单篇 mp 文章，不替代微信客户端的公众号历史接口。
+            （浏览器内增删，Vercel KV 持久化，需配置 ACCOUNTS_ADMIN_TOKEN）。x-fetcher 抓取单篇 mp 文章，不替代微信客户端的公众号历史接口。
           </p>
         </section>
         <p>

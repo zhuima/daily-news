@@ -1,25 +1,14 @@
 import catalogJson from "@/data/index.json";
-import accountsJson from "@/data/accounts.json";
 import type { Article, Catalog, Scan } from "@/lib/types";
 import { normalizeArticle } from "@/lib/articles";
-import { slugifyAccount } from "@/lib/slug";
+import {
+  getTrackedAccountBySlug,
+  listTrackedAccounts,
+} from "@/lib/accounts-api";
+
+export type { TrackedAccount } from "@/lib/accounts-types";
 
 const catalog = catalogJson as Catalog;
-
-export type TrackedAccount = {
-  slug: string;
-  name: string;
-  notes?: string;
-  addedAt: string;
-};
-
-type AccountsFile = {
-  version: string;
-  updatedAt: string;
-  accounts: TrackedAccount[];
-};
-
-const accountsFile = accountsJson as AccountsFile;
 
 const articles = catalog.articles.map(normalizeArticle);
 
@@ -76,23 +65,22 @@ export function getQueriesForScan(scanId: string): string[] {
   return [...seen];
 }
 
-export function getTrackedAccounts(): TrackedAccount[] {
-  return accountsFile.accounts.map((account) => ({
-    ...account,
-    slug: account.slug || slugifyAccount(account.name),
-  }));
-}
-
-export function getTrackedAccount(slug: string): TrackedAccount | undefined {
-  return getTrackedAccounts().find((account) => account.slug === slug);
-}
-
 export function getArticlesByAccountName(accountName: string): Article[] {
   return articles.filter((article) => article.account === accountName);
 }
 
-export function getArticlesByAccountSlug(slug: string): Article[] {
-  const account = getTrackedAccount(slug);
+export async function getTrackedAccounts() {
+  return listTrackedAccounts();
+}
+
+export async function getTrackedAccount(slug: string) {
+  return getTrackedAccountBySlug(slug);
+}
+
+export async function getArticlesByAccountSlug(
+  slug: string,
+): Promise<Article[]> {
+  const account = await getTrackedAccountBySlug(slug);
   if (!account) return [];
   return getArticlesByAccountName(account.name);
 }
