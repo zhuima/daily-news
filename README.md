@@ -114,7 +114,8 @@ npx vercel
 
 ## 公众号追踪与正文下载
 
-- 追踪列表：`data/accounts.json`，页面 `/accounts`
+- 追踪列表：页面 `/accounts`（Vercel KV 持久化；`data/accounts.json` 为种子）
+- 环境变量：`KV_REST_API_URL`、`KV_REST_API_TOKEN`（Upstash Redis）、`ACCOUNTS_ADMIN_TOKEN`（管理口令）
 - 单篇正文：[x-fetcher](https://github.com/zhuima/x-fetcher) 的 `fetch_wechat.py`（**单 mp URL**，非公众号历史）
 - 批量（仅已收录链接）：
 

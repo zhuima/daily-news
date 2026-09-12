@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getAllArticles, getScans, getTrackedAccounts } from "@/lib/data";
+import { listTrackedAccounts } from "@/lib/accounts-api";
+import { getAllArticles, getScans } from "@/lib/data";
 import { absoluteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const entries: MetadataRoute.Sitemap = [
     {
@@ -52,7 +53,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  for (const account of getTrackedAccounts()) {
+  const accounts = await listTrackedAccounts();
+  for (const account of accounts) {
     entries.push({
       url: absoluteUrl(`/accounts/${account.slug}`),
       lastModified: now,

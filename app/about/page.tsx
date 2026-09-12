@@ -49,11 +49,11 @@ export default function AboutPage() {
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               data/index.json
             </code>
-            、{" "}
+            ；公众号追踪列表在运行时写入 Vercel KV（种子见{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               data/accounts.json
             </code>
-            ，页面在构建时读入。
+            ）。
           </p>
         </section>
         <section>
@@ -97,7 +97,7 @@ export default function AboutPage() {
             <Link href="/accounts" className="text-marrs">
               /accounts
             </Link>
-            。x-fetcher 抓取单篇 mp 文章，不替代微信客户端的公众号历史接口。
+            （浏览器内增删，Vercel KV 持久化，需配置 ACCOUNTS_ADMIN_TOKEN）。x-fetcher 抓取单篇 mp 文章，不替代微信客户端的公众号历史接口。
           </p>
         </section>
         <p>
