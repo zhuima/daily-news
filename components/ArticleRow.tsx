@@ -25,22 +25,17 @@ export function ArticleRow({
         <span className="text-marrs">{article.channel}</span>
         <span>·</span>
         <span>{article.query}</span>
-        {article.hasDirectLink ? (
-          <>
-            <span>·</span>
-            <span>可打开原文</span>
-          </>
-        ) : null}
       </div>
       <h3 className="mt-1.5 text-[15px] leading-6 text-ink">{article.title}</h3>
-      <p className="mt-1 text-xs text-muted">
-        {article.account}
-        <span className="mx-1.5">·</span>
-        {article.publishedLabel}
+      <p className="mt-2 text-sm text-ink">
+        <span className="text-marrs">{article.account}</span>
+        <span className="mx-2 text-muted">·</span>
+        <span>{article.publishedLabel}</span>
       </p>
       <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/70">
         {article.summary}
       </p>
+      <p className="mt-2 text-xs text-marrs">打开原文 →</p>
     </Link>
   );
 }

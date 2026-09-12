@@ -23,7 +23,6 @@ export function ScanWorkspace({
   selectedArticle?: Article;
 }) {
   const query = useFilters((s) => s.query);
-  const hasDirectLinkOnly = useFilters((s) => s.hasDirectLinkOnly);
   const search = useFilters((s) => s.search);
   const reset = useFilters((s) => s.reset);
 
@@ -35,12 +34,12 @@ export function ScanWorkspace({
     const needle = search.trim().toLowerCase();
     return articles.filter((article) => {
       if (query && article.query !== query) return false;
-      if (hasDirectLinkOnly && !article.hasDirectLink) return false;
       if (!needle) return true;
-      const haystack = `${article.title} ${article.account} ${article.summary}`.toLowerCase();
+      const haystack =
+        `${article.title} ${article.account} ${article.summary} ${article.publishedLabel}`.toLowerCase();
       return haystack.includes(needle);
     });
-  }, [articles, query, hasDirectLinkOnly, search]);
+  }, [articles, query, search]);
 
   const closeHref = `/scans/${scan.id}`;
 
@@ -56,7 +55,7 @@ export function ScanWorkspace({
         <p className="mt-3 text-sm text-muted">
           {sourceLabel(scan.sources)}
           <span className="mx-2">·</span>
-          {scan.articleCount} 篇
+          {scan.articleCount} 篇可打开原文
           <span className="mx-2">·</span>
           当前显示 {visible.length} 篇
         </p>
@@ -73,7 +72,9 @@ export function ScanWorkspace({
         <section className="overflow-hidden rounded-sm bg-paper ring-1 ring-line">
           <div className="flex items-center justify-between border-b border-line px-5 py-3">
             <h2 className="text-sm text-ink">文章列表</h2>
-            <p className="text-xs text-muted">{visible.length} / {articles.length}</p>
+            <p className="text-xs text-muted">
+              {visible.length} / {articles.length}
+            </p>
           </div>
           <div className="max-h-[70vh] overflow-y-auto lg:max-h-[calc(100vh-16rem)]">
             <ArticleList

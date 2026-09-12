@@ -26,10 +26,15 @@ export default function AboutPage() {
         <section>
           <h2 className="text-xl tracking-tight text-ink">一次扫描里有什么</h2>
           <p className="mt-3">
-            每个 scan 有日期、标题、来源和篇数。文章带渠道、检索词、账号、相对发布时间、摘要，以及是否拿得到公众号原文链接。
-          </p>
-          <p className="mt-3">
-            第一份样例扫描来自微信读书（weread），主题是云原生训推、算力成本与模型测评。检索词覆盖 vLLM / SGLang、PD 分离、Kueue / Volcano、GPU MFU、昇腾 Day0、独立评测复现。
+            每个 scan 有日期、标题、来源和篇数。列表只收录同时满足：公众号名称、发布时间、可验证原文链接（优先{" "}
+            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
+              mp.weixin.qq.com
+            </code>{" "}
+            带 <code>__biz</code> / <code>mid</code>+<code>sn</code> 参数）。缺字段或合成占位链接的条目不会出现在 UI，而是写入{" "}
+            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
+              data/rejected-articles.json
+            </code>
+            。
           </p>
         </section>
         <section>
@@ -46,17 +51,13 @@ export default function AboutPage() {
             传给列表和面板。刷新、分享、后退都指向同一篇，不把「正在读哪篇」放进 Zustand 或组件 state。
           </p>
           <p className="mt-3">
-            Zustand 只存筛选：关键词、是否仅看可打开原文、搜索框。
+            Zustand 只存筛选：检索词 chip 与关键词搜索框。
           </p>
         </section>
         <section>
           <h2 className="text-xl tracking-tight text-ink">「打开原文」</h2>
           <p className="mt-3">
-            仅当{" "}
-            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
-              hasDirectLink
-            </code>{" "}
-            为真且存在 url 时显示。微信外链经常失效或需登录，没有直链的条目只保留摘要。
+            列表中的每篇都有「打开原文」按钮，指向已校验的 url。不会把无链接摘要放进可选列表。
           </p>
         </section>
         <section>

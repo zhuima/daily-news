@@ -774,9 +774,35 @@ function pad(n) {
   return String(n).padStart(3, "0");
 }
 
-const articles = rows.map((row, index) => {
+function isVerifiableUrl(url) {
+  const trimmed = (url ?? "").trim();
+  if (!trimmed.startsWith("http")) return false;
+  if (
+    /^https?:\/\/mp\.weixin\.qq\.com\/s\/(?:20\d{2}-\d{2}-\d{2}-weread-\d+|[^?]+)$/i.test(
+      trimmed,
+    ) &&
+    !trimmed.includes("__biz=")
+  ) {
+    return false;
+  }
+  if (trimmed.includes("mp.weixin.qq.com")) {
+    return (
+      trimmed.includes("__biz=") ||
+      (trimmed.includes("mid=") && trimmed.includes("sn="))
+    );
+  }
+  return (
+    trimmed.includes("weixin.sogou.com") || trimmed.includes("weread.qq.com")
+  );
+}
+
+const draftArticles = rows.map((row, index) => {
   const id = `2026-09-12-weread-${pad(index + 1)}`;
-  const hasDirectLink = row.hasDirectLink ?? index % 3 !== 2;
+  const url = row.url?.trim() ?? "";
+  const publishable =
+    Boolean(row.account?.trim()) &&
+    Boolean(row.publishedLabel?.trim()) &&
+    isVerifiableUrl(url);
   return {
     id,
     scanDate: "2026-09-12",
@@ -786,30 +812,38 @@ const articles = rows.map((row, index) => {
     account: row.account,
     publishedLabel: row.publishedLabel,
     summary: row.summary,
-    url: row.url ?? (hasDirectLink ? `https://mp.weixin.qq.com/s/${id}` : ""),
-    hasDirectLink,
+    url: publishable ? url : "",
+    hasDirectLink: publishable,
+    _publishable: publishable,
   };
 });
 
-if (articles.length !== 90) {
-  throw new Error(`expected 90 articles, got ${articles.length}`);
+function stripPublishableFlag({ _publishable: _flag, ...rest }) {
+  return rest;
 }
+
+const articles = draftArticles
+  .filter((article) => article._publishable)
+  .map(stripPublishableFlag);
+const rejected = draftArticles
+  .filter((article) => !article._publishable)
+  .map(stripPublishableFlag);
 
 const first = articles[0];
 if (
+  !first ||
   first.id !== "2026-09-12-weread-001" ||
-  first.title !== "SGLang 和 vLLM：大模型背后的“推理引擎”" ||
-  first.account !== "水金聊投资" ||
-  first.publishedLabel !== "27分钟前" ||
-  first.url !== REQUIRED_URL ||
-  first.hasDirectLink !== true
+  first.url !== REQUIRED_URL
 ) {
-  throw new Error("required seed article mismatch");
+  throw new Error("required verified seed article missing");
 }
+
+const dataDir = join(dirname(fileURLToPath(import.meta.url)), "..", "data");
+mkdirSync(dataDir, { recursive: true });
 
 const catalog = {
   version: "1.0.0",
-  updatedAt: "2026-09-12T09:00:00+08:00",
+  updatedAt: new Date().toISOString(),
   scans: [
     {
       id: "2026-09-12",
@@ -818,13 +852,26 @@ const catalog = {
       sources: ["weread"],
       articleCount: articles.length,
       notes:
-        "微信读书关键词扫描样例。覆盖推理引擎、PD 分离、调度、算力成本、昇腾 Day0 与独立评测复现。后续可用完整 90 篇数据集替换本文件。",
+        "当前仅展示已验证可打开原文的条目。未通过校验的草稿见 data/rejected-articles.json。",
     },
   ],
   articles,
 };
 
-const out = join(dirname(fileURLToPath(import.meta.url)), "..", "data", "index.json");
-mkdirSync(dirname(out), { recursive: true });
-writeFileSync(out, `${JSON.stringify(catalog, null, 2)}\n`);
-console.log(`wrote ${articles.length} articles to ${out}`);
+writeFileSync(join(dataDir, "index.json"), `${JSON.stringify(catalog, null, 2)}\n`);
+writeFileSync(
+  join(dataDir, "rejected-articles.json"),
+  `${JSON.stringify(
+    {
+      version: "1.0.0",
+      reason: "缺少 account / publishedLabel / 可验证 url",
+      count: rejected.length,
+      articles: rejected,
+    },
+    null,
+    2,
+  )}\n`,
+);
+console.log(
+  `wrote ${articles.length} publishable and ${rejected.length} rejected articles`,
+);
