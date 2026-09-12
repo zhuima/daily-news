@@ -183,7 +183,7 @@ export default function HomePage() {
         <HomeSearch articles={articles} />
       </section>
 
-      <section className="editorial-container pb-16 sm:pb-24">
+      <section id="scans" className="editorial-container pb-16 sm:pb-24">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
           <div>
             <div className="flex items-end justify-between gap-4">
