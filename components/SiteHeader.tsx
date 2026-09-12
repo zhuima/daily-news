@@ -1,27 +1,32 @@
 import Link from "next/link";
+import { MobileNav } from "@/components/MobileNav";
 import { SiteNav } from "@/components/SiteNav";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-line/90 bg-canvas/90 backdrop-blur-md">
-      <div className="editorial-container flex h-[4.25rem] items-center justify-between gap-6">
-        <Link href="/" className="group flex min-w-0 items-center gap-4">
+    <header className="sticky top-0 z-50 border-b border-line bg-canvas/95 backdrop-blur-md">
+      <div className="editorial-container flex h-14 items-center justify-between gap-4 md:h-[4.5rem]">
+        <Link
+          href="/"
+          className="group flex min-w-0 flex-1 items-center gap-3 md:gap-4 md:flex-none"
+        >
           <span
-            className="flex h-10 w-10 shrink-0 items-center justify-center border border-marrs/30 bg-marrs text-sm font-semibold text-white"
+            className="flex h-9 w-9 shrink-0 items-center justify-center bg-marrs text-sm font-semibold text-white md:h-10 md:w-10"
             aria-hidden
           >
             赛
           </span>
-          <span className="min-w-0">
-            <span className="block truncate text-lg font-medium tracking-tight text-ink group-hover:text-marrs">
+          <span className="min-w-0 leading-tight">
+            <span className="block truncate text-[1.05rem] font-semibold tracking-tight text-ink group-hover:text-marrs md:text-lg">
               赛道扫描
             </span>
-            <span className="block truncate font-display text-[10px] tracking-[0.24em] text-muted uppercase">
+            <span className="hidden font-display text-[11px] tracking-[0.2em] text-muted uppercase md:block">
               WeRead Track Archive
             </span>
           </span>
         </Link>
         <SiteNav />
+        <MobileNav />
       </div>
     </header>
   );

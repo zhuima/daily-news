@@ -9,24 +9,29 @@ const nav = [
   { href: "/about", label: "关于" },
 ] as const;
 
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+
 export function SiteNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-1 sm:gap-2" aria-label="主导航">
+    <nav
+      className="hidden items-center gap-1 md:flex"
+      aria-label="主导航"
+    >
       {nav.map((item) => {
-        const active =
-          item.href === "/"
-            ? pathname === "/"
-            : pathname.startsWith(item.href);
+        const active = isActive(pathname, item.href);
         return (
           <Link
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`rounded-sm px-3 py-2 text-sm transition-colors ${
+            className={`rounded-sm px-3.5 py-2 text-sm font-medium transition-colors ${
               active
-                ? "bg-marrs/10 text-marrs"
+                ? "bg-marrs text-white"
                 : "text-muted hover:bg-paper hover:text-marrs"
             }`}
           >
@@ -34,9 +39,10 @@ export function SiteNav() {
           </Link>
         );
       })}
+      <span className="mx-2 h-4 w-px bg-line" aria-hidden />
       <Link
         href="/#site-search"
-        className="hidden rounded-sm px-3 py-2 text-sm text-muted transition-colors hover:text-marrs sm:inline"
+        className="rounded-sm px-3.5 py-2 text-sm text-muted transition-colors hover:text-marrs"
       >
         搜索
       </Link>
