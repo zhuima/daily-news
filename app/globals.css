@@ -31,6 +31,10 @@
   --font-display: var(--font-display-stack), "Songti SC", serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   background: var(--canvas);
@@ -42,7 +46,30 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.035;
+  background-image: radial-gradient(var(--ink) 0.6px, transparent 0.6px);
+  background-size: 24px 24px;
+  z-index: -1;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--marrs) 22%, white);
   color: var(--marrs-ink);
+}
+
+.editorial-container {
+  @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+}
+
+.editorial-rule {
+  @apply h-px w-full bg-line;
+}
+
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-sm focus:bg-marrs focus:px-4 focus:py-2 focus:text-white;
 }

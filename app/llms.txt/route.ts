@@ -19,6 +19,10 @@ ${base}
 - About / data policy: ${base}/about
 - Tracked WeChat accounts (online admin): ${base}/accounts
 - Scan workspace pattern: ${base}/scans/{scanId}?article={articleId}
+- Sitemap: ${base}/sitemap.xml
+- RSS (verified article links only): ${base}/feed.xml
+- Robots: ${base}/robots.txt
+- Web manifest: ${base}/manifest.webmanifest
 
 ## Scans (${scans.length})
 ${scans.map((scan) => `- ${scan.date} ${scan.title}: ${base}/scans/${scan.id}`).join("\n")}
