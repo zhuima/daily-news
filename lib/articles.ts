@@ -4,6 +4,15 @@ import type { Article } from "@/lib/types";
 const SYNTHETIC_MP_PATH =
   /^https?:\/\/mp\.weixin\.qq\.com\/s\/(?:20\d{2}-\d{2}-\d{2}-weread-\d+|[^?]+)$/i;
 
+export type ArticleLinkKind = "mp-direct" | "sogou-search";
+
+export type ArticleLink = {
+  href: string;
+  kind: ArticleLinkKind;
+  label: string;
+  hint?: string;
+};
+
 export function isVerifiableArticleUrl(url: string | undefined): boolean {
   const trimmed = url?.trim() ?? "";
   if (!trimmed.startsWith("http")) return false;
@@ -25,17 +34,34 @@ export function isVerifiableArticleUrl(url: string | undefined): boolean {
   return false;
 }
 
-export function isPublishableArticle(article: Article): boolean {
-  if (!article.account?.trim()) return false;
-  if (!article.publishedLabel?.trim()) return false;
-  if (!isVerifiableArticleUrl(article.url)) return false;
-  return true;
+export function sogouWeixinSearchUrl(article: Article): string {
+  const query = `${article.title} ${article.account}`.trim();
+  return `https://weixin.sogou.com/weixin?type=2&query=${encodeURIComponent(query)}`;
 }
 
-export function withPublishableLink(article: Article): Article {
+export function resolveArticleLink(article: Article): ArticleLink {
+  if (isVerifiableArticleUrl(article.url)) {
+    return {
+      href: article.url.trim(),
+      kind: "mp-direct",
+      label: "打开原文",
+    };
+  }
+  return {
+    href: sogouWeixinSearchUrl(article),
+    kind: "sogou-search",
+    label: "打开原文",
+    hint: "暂无已验证的公众号直链，将通过搜狗微信搜索该标题与公众号。",
+  };
+}
+
+export function normalizeArticle(article: Article): Article {
+  const verified = isVerifiableArticleUrl(article.url);
   return {
     ...article,
-    url: article.url.trim(),
-    hasDirectLink: true,
+    account: article.account?.trim() || "未知公众号",
+    publishedLabel: article.publishedLabel?.trim() || "时间待补",
+    url: verified ? article.url.trim() : article.url?.trim() ?? "",
+    hasDirectLink: verified,
   };
 }

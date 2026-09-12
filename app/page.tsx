@@ -1,6 +1,7 @@
 import { ScanCard } from "@/components/ScanCard";
 import { HomeSearch } from "@/components/HomeSearch";
-import { getAllPublishableArticles, getCatalog, getScans } from "@/lib/data";
+import { isVerifiableArticleUrl } from "@/lib/articles";
+import { getAllArticles, getCatalog, getScans } from "@/lib/data";
 import { formatScanDate } from "@/lib/format";
 
 export default function HomePage() {
@@ -8,7 +9,10 @@ export default function HomePage() {
   const catalog = getCatalog();
   const articleTotal = catalog.articles.length;
   const latestScan = scans[0];
-  const articles = getAllPublishableArticles();
+  const articles = getAllArticles();
+  const directLinkTotal = articles.filter((article) =>
+    isVerifiableArticleUrl(article.url),
+  ).length;
 
   return (
     <main>
@@ -29,8 +33,12 @@ export default function HomePage() {
               <dd className="mt-1 text-white">{scans.length} 次</dd>
             </div>
             <div>
-              <dt className="text-white/65">可打开原文</dt>
+              <dt className="text-white/65">文章条目</dt>
               <dd className="mt-1 text-white">{articleTotal} 篇</dd>
+            </div>
+            <div>
+              <dt className="text-white/65">已验证直链</dt>
+              <dd className="mt-1 text-white">{directLinkTotal} 篇</dd>
             </div>
             {latestScan ? (
               <div>

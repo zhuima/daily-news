@@ -26,15 +26,11 @@ export default function AboutPage() {
         <section>
           <h2 className="text-xl tracking-tight text-ink">一次扫描里有什么</h2>
           <p className="mt-3">
-            每个 scan 有日期、标题、来源和篇数。列表只收录同时满足：公众号名称、发布时间、可验证原文链接（优先{" "}
+            每个 scan 有日期、标题、来源和篇数。列表保留扫描到的全部文章，并在 UI 上展示公众号、发布时间与链接操作。已有验证过的{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               mp.weixin.qq.com
             </code>{" "}
-            带 <code>__biz</code> / <code>mid</code>+<code>sn</code> 参数）。缺字段或合成占位链接的条目不会出现在 UI，而是写入{" "}
-            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
-              data/rejected-articles.json
-            </code>
-            。
+            直链时「打开原文」直达微信；尚未补全 url 的条目会通过搜狗微信搜索标题与公众号，便于后续人工补链。
           </p>
         </section>
         <section>
@@ -57,7 +53,7 @@ export default function AboutPage() {
         <section>
           <h2 className="text-xl tracking-tight text-ink">「打开原文」</h2>
           <p className="mt-3">
-            列表中的每篇都有「打开原文」按钮，指向已校验的 url。不会把无链接摘要放进可选列表。
+            「打开原文」在有条目直链时跳转微信；否则跳转搜狗微信检索，同一按钮文案，避免无链接的死胡同。
           </p>
         </section>
         <section>

@@ -55,7 +55,7 @@ export function ScanWorkspace({
         <p className="mt-3 text-sm text-muted">
           {sourceLabel(scan.sources)}
           <span className="mx-2">·</span>
-          {scan.articleCount} 篇可打开原文
+          {scan.articleCount} 篇
           <span className="mx-2">·</span>
           当前显示 {visible.length} 篇
         </p>

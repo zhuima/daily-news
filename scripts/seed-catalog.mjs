@@ -796,13 +796,9 @@ function isVerifiableUrl(url) {
   );
 }
 
-const draftArticles = rows.map((row, index) => {
+const articles = rows.map((row, index) => {
   const id = `2026-09-12-weread-${pad(index + 1)}`;
   const url = row.url?.trim() ?? "";
-  const publishable =
-    Boolean(row.account?.trim()) &&
-    Boolean(row.publishedLabel?.trim()) &&
-    isVerifiableUrl(url);
   return {
     id,
     scanDate: "2026-09-12",
@@ -812,26 +808,17 @@ const draftArticles = rows.map((row, index) => {
     account: row.account,
     publishedLabel: row.publishedLabel,
     summary: row.summary,
-    url: publishable ? url : "",
-    hasDirectLink: publishable,
-    _publishable: publishable,
+    url,
+    hasDirectLink: isVerifiableUrl(url),
   };
 });
 
-function stripPublishableFlag({ _publishable: _flag, ...rest }) {
-  return rest;
+if (articles.length !== 90) {
+  throw new Error(`expected 90 articles, got ${articles.length}`);
 }
-
-const articles = draftArticles
-  .filter((article) => article._publishable)
-  .map(stripPublishableFlag);
-const rejected = draftArticles
-  .filter((article) => !article._publishable)
-  .map(stripPublishableFlag);
 
 const first = articles[0];
 if (
-  !first ||
   first.id !== "2026-09-12-weread-001" ||
   first.url !== REQUIRED_URL
 ) {
@@ -852,26 +839,11 @@ const catalog = {
       sources: ["weread"],
       articleCount: articles.length,
       notes:
-        "当前仅展示已验证可打开原文的条目。未通过校验的草稿见 data/rejected-articles.json。",
+        "微信读书关键词扫描样例。全部条目保留；有验证 mp 直链的直达微信，其余通过搜狗微信检索补链。",
     },
   ],
   articles,
 };
 
 writeFileSync(join(dataDir, "index.json"), `${JSON.stringify(catalog, null, 2)}\n`);
-writeFileSync(
-  join(dataDir, "rejected-articles.json"),
-  `${JSON.stringify(
-    {
-      version: "1.0.0",
-      reason: "缺少 account / publishedLabel / 可验证 url",
-      count: rejected.length,
-      articles: rejected,
-    },
-    null,
-    2,
-  )}\n`,
-);
-console.log(
-  `wrote ${articles.length} publishable and ${rejected.length} rejected articles`,
-);
+console.log(`wrote ${articles.length} articles to data/index.json`);

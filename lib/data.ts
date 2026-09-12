@@ -1,25 +1,19 @@
 import catalogJson from "@/data/index.json";
 import type { Article, Catalog, Scan } from "@/lib/types";
-import {
-  isPublishableArticle,
-  withPublishableLink,
-} from "@/lib/articles";
+import { normalizeArticle } from "@/lib/articles";
 
 const catalog = catalogJson as Catalog;
 
-const publishableArticles = catalog.articles
-  .filter(isPublishableArticle)
-  .map(withPublishableLink);
+const articles = catalog.articles.map(normalizeArticle);
 
 export function getCatalog(): Catalog {
   return {
     ...catalog,
-    articles: publishableArticles,
+    articles,
     scans: catalog.scans.map((scan) => ({
       ...scan,
-      articleCount: publishableArticles.filter(
-        (article) => article.scanDate === scan.date,
-      ).length,
+      articleCount: articles.filter((article) => article.scanDate === scan.date)
+        .length,
     })),
   };
 }
@@ -35,22 +29,22 @@ export function getScan(scanId: string): Scan | undefined {
 export function getArticlesByScan(scanId: string): Article[] {
   const scan = getScan(scanId);
   if (!scan) return [];
-  return publishableArticles.filter((article) => article.scanDate === scan.date);
+  return articles.filter((article) => article.scanDate === scan.date);
 }
 
-export function getAllPublishableArticles(): Article[] {
-  return publishableArticles;
+export function getAllArticles(): Article[] {
+  return articles;
 }
 
 export function getArticle(id: string | undefined): Article | undefined {
   if (!id) return undefined;
-  return publishableArticles.find((article) => article.id === id);
+  return articles.find((article) => article.id === id);
 }
 
-export function searchPublishableArticles(query: string): Article[] {
+export function searchArticles(query: string): Article[] {
   const needle = query.trim().toLowerCase();
-  if (!needle) return publishableArticles;
-  return publishableArticles.filter((article) => {
+  if (!needle) return articles;
+  return articles.filter((article) => {
     const haystack =
       `${article.title} ${article.account} ${article.summary} ${article.query} ${article.publishedLabel}`.toLowerCase();
     return haystack.includes(needle);
