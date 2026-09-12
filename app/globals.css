@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --marrs: #01847e;
+  --marrs-deep: #016660;
+  --marrs-ink: #013c39;
+  --canvas: #f6f5f2;
+  --paper: #ffffff;
+  --ink: #1c1b19;
+  --muted: #6b6964;
+  --line: #e4e1d8;
+  --background: var(--canvas);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-marrs: var(--marrs);
+  --color-marrs-deep: var(--marrs-deep);
+  --color-marrs-ink: var(--marrs-ink);
+  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans-stack), "PingFang SC", "Hiragino Sans GB",
+    "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-serif: var(--font-serif-stack), "Songti SC", "Noto Serif SC", "STSong",
+    serif;
+  --font-display: var(--font-display-stack), "Songti SC", serif;
+}
+
+html,
+body {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--marrs) 22%, white);
+  color: var(--marrs-ink);
+}
