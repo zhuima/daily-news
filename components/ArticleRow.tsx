@@ -34,29 +34,39 @@ export function ArticleRow({
           {article.hasDirectLink ? (
             <>
               <span>·</span>
-              <span>直链</span>
+              <span>已收录链接</span>
             </>
-          ) : null}
+          ) : (
+            <>
+              <span>·</span>
+              <span>链接待补</span>
+            </>
+          )}
         </div>
         <h3 className="mt-1.5 text-[15px] leading-6 text-ink">{article.title}</h3>
         <p className="mt-2 text-sm text-ink">
           <span className="text-marrs">{article.account}</span>
           <span className="mx-2 text-muted">·</span>
-          <span>{article.publishedLabel}</span>
+          <time dateTime={article.scanDate}>{article.publishedLabel}</time>
         </p>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/70">
           {article.summary}
         </p>
       </Link>
       <div className="px-4 pb-4 sm:px-5">
-        <a
-          href={outbound.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex text-xs text-marrs hover:text-marrs-deep"
-        >
-          {outbound.label} →
-        </a>
+        {outbound ? (
+          <a
+            href={outbound.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`打开原文：${article.title}`}
+            className="inline-flex text-xs text-marrs hover:text-marrs-deep"
+          >
+            {outbound.label} →
+          </a>
+        ) : (
+          <span className="text-xs text-muted">原文链接待收录</span>
+        )}
       </div>
     </div>
   );

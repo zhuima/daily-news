@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-12T17:20:00+08:00",
+  "updatedAt": "2026-09-12T21:10:00+08:00",
   "scans": [
     {
       "id": "2026-09-12",
@@ -10,7 +10,7 @@
         "weread"
       ],
       "articleCount": 90,
-      "notes": "微信读书关键词扫描样例。列表保留全部条目；有真实 mp 链接的直开原文，其余提供搜狗微信检索入口，后续可补全 url。"
+      "notes": "保留全部扫描条目；仅已验证 mp / 搜狗 link 跳转文章可「打开原文」，禁止搜索页兜底。"
     }
   ],
   "articles": [
@@ -35,8 +35,8 @@
       "account": "Serving 研究室",
       "publishedLabel": "1小时前",
       "summary": "对照实验固定模型、长度分布和并发水位，只换引擎。vLLM 在随机短请求上更稳，SGLang 在系统提示高度复用的会话里把前缀命中率拉到肉眼可见。结论不是谁赢，而是你的流量长什么样。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-002",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-003",
@@ -59,8 +59,8 @@
       "account": "机智流",
       "publishedLabel": "3小时前",
       "summary": "Agent、工具调用和多轮客服把同一段系统提示反复送进引擎。前缀树一旦命中，prefill 从算力问题变成查表问题。SGLang 把这件事做成默认路径，账本上最明显的是输入 token 单价下降。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-004",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-005",
@@ -95,8 +95,8 @@
       "account": "模型前线",
       "publishedLabel": "2天前",
       "summary": "JSON 模式、正则约束和语法引导会改变采样轨迹，也会改变吞吐。约束越严，无效 token 越少，但状态机本身吃调度。用 SGLang 接内部 API 时，要把 schema 稳定性和引擎版本绑在一起发。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-007",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-008",
@@ -131,8 +131,8 @@
       "account": "硅星人Pro",
       "publishedLabel": "3天前",
       "summary": "消费卡上的数字不能直接外推数据中心，但能检验实现是否诚实。记录了 7B/14B 在 2k/8k 上下文下的首字与吞吐，并标出开启前缀缓存前后的差。适合当作个人基线，而不是对外 SLA。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-010",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-011",
@@ -167,8 +167,8 @@
       "account": "训练推理手记",
       "publishedLabel": "一周前",
       "summary": "草稿模型够准时，投机解码能吃掉 decode 瓶颈；草稿经常打脸时，验证开销会把吞吐打穿。文中给了一个按接受率回算的简单盈亏式，避免把博客数字直接写进容量规划。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-013",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-014",
@@ -203,8 +203,8 @@
       "account": "Serving 研究室",
       "publishedLabel": "1小时前",
       "summary": "Prefill 吃算力，Decode 吃显存带宽，两者绑在同一组 SM 上会互相伤害。PD 分离把阶段拆到不同池，用中间 KV 传输换调度自由度。这是 2025–2026 云原生训推最常被问的架构题。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-016",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-017",
@@ -215,8 +215,8 @@
       "account": "算力观察",
       "publishedLabel": "2小时前",
       "summary": "拆开之后，瓶颈从 GPU 内核挪到互联。同节点 NVLink、机内 PCIe、跨机 RDMA，每一跳都在吃掉分离带来的利用率。没有测过 KV 带宽，就不要宣布「我们已经 PD 了」。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-017",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-018",
@@ -239,8 +239,8 @@
       "account": "开源前线",
       "publishedLabel": "昨天",
       "summary": "从 DistServe、Splitwise 到各家内部实现，论文关心气泡，工单关心掉线重连。把学术图翻译成 Kubernetes 服务时，最难的是 KV 传输失败后的重算策略。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-019",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-020",
@@ -251,8 +251,8 @@
       "account": "训练推理手记",
       "publishedLabel": "昨天",
       "summary": "Prefill 对中断更宽容，适合混部抢占式节点；Decode 要粘性和热缓存，适合稳定池。PD 分离让财务第一次能把两拨 GPU 买成不同规格。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-020",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-021",
@@ -275,8 +275,8 @@
       "account": "云原生指北",
       "publishedLabel": "2天前",
       "summary": "引擎开始提供分离接口，并不等于开箱即用。还要自己解决服务发现、一致性哈希和缓存亲和。很多团队其实跑的是「半分离」：prefill 独立，decode 仍和旧网关缠在一起。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-022",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-023",
@@ -287,8 +287,8 @@
       "account": "国产芯观察",
       "publishedLabel": "3天前",
       "summary": "一旦跨过单机，就要谈序列化、校验和失败重放。国产互联和 NVIDIA 域不能共用同一套假设。Day0 支持经常卡在「KV 过不了河」，而不是模型权重本身。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-023",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-024",
@@ -311,8 +311,8 @@
       "account": "硅星人Pro",
       "publishedLabel": "5天前",
       "summary": "用火焰图说明：短 decode 占着 SM，长 prefill 进不来；或反过来。PD 分离是在空间上拆开这张图，而不是让内核「更聪明」。适合给非内核同学对齐语言。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-025",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-026",
@@ -323,8 +323,8 @@
       "account": "卡间经济学",
       "publishedLabel": "5天前",
       "summary": "比例取决于输入输出比、缓存命中和 SLA。文中给了一个用 token 流量反推卡数的表，并提醒高峰时段输出突然变长时，decode 池会先崩。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-026",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-027",
@@ -347,8 +347,8 @@
       "account": "Infra 周报",
       "publishedLabel": "一周前",
       "summary": "多一个池就多一套 HPA、探针和发布窗口。很多中小团队拆完发现值班变复杂了，利用率却没上去。先分离流量最大的一条产品线，比全站改造更诚实。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-028",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-029",
@@ -359,8 +359,8 @@
       "account": "水金聊投资",
       "publishedLabel": "一周前",
       "summary": "有人说的是引擎内核拆阶段，有人说的是两个 Deployment，有人只是把长请求换了个队列。投资材料里出现 PD 分离，先问清 KV 在哪、谁持有会话。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-029",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-030",
@@ -383,8 +383,8 @@
       "account": "K8s 深夜食堂",
       "publishedLabel": "1小时前",
       "summary": "Kueue 在队列和配额层工作，不替代 kube-scheduler 的绑核。对训推平台来说，这意味着「这个团队这周还能再拿 32 张 H100」第一次变成 API，而不是群里喊话。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-031",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-032",
@@ -395,8 +395,8 @@
       "account": "调度器札记",
       "publishedLabel": "2小时前",
       "summary": "Volcano 把 All-or-Nothing 带进 Kubernetes 已经很多年。今天它仍出现在不少训练集群里，尤其是和 Spark、MPI 混部的环境。新平台要换 Kueue，得先盘点这些 gang 假设。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-032",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-033",
@@ -419,8 +419,8 @@
       "account": "云原生指北",
       "publishedLabel": "昨天",
       "summary": "可以叠，但两套队列语义会打架。更常见的路径是：Kueue 管配额与公平，底层用 Coscheduling / Volcano 保证 gang。架构图上画两个方框很容易，值班手册要写清谁先拒谁。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-034",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-035",
@@ -431,8 +431,8 @@
       "account": "Infra 周报",
       "publishedLabel": "昨天",
       "summary": "团队看到的是本地队列，平台看到的是集群配额和借贷。讲清楚借款会不会被回收，比再写一份 YAML 更能减少「为什么我的 Job 不跑」。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-035",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-036",
@@ -455,8 +455,8 @@
       "account": "开源前线",
       "publishedLabel": "2天前",
       "summary": "默认调度看见的是 CPU 内存，不是拓扑、NVLink 域和模型并行尺寸。Gang、拓扑感知和队列是三块补丁。指望一个默认 scheduler 吃下万卡训练，是 2023 年的幻想。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-037",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-038",
@@ -467,8 +467,8 @@
       "account": "K8s 深夜食堂",
       "publishedLabel": "3天前",
       "summary": "weight、reclaimable 和 capability 写反，导致小团队永远借不到卡，大团队把碎片吃光。配置即政策，应该和财务预算一起 review，而不是只丢给平台值班。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-038",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-039",
@@ -491,8 +491,8 @@
       "account": "调度器札记",
       "publishedLabel": "5天前",
       "summary": "配额层通过了，并不等于拓扑层能放下一个 8 卡一组的并行单元。把 Topology Aware Scheduling 和 Kueue 切开看，排障才不会在两个控制器之间踢皮球。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-040",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-041",
@@ -503,8 +503,8 @@
       "account": "硅星人Pro",
       "publishedLabel": "5天前",
       "summary": "没有可见性，所有调度讨论都会变成阴谋论。哪怕只是把 Kueue 队列位置打到注释里，也能减少一半「平台是不是针对我」的工单。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-041",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-042",
@@ -527,8 +527,8 @@
       "account": "云原生指北",
       "publishedLabel": "一周前",
       "summary": "只需要 gang，插件更轻；需要队列、抢占、异构资源，Volcano 或 Kueue 更完整。文章给了一个「功能/运维成本」对照表，避免一上来上最重的那套。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-043",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-044",
@@ -539,8 +539,8 @@
       "account": "Infra 周报",
       "publishedLabel": "一周前",
       "summary": "Quota exceeded、gang waiting、topology mismatch、PVC、污点，全部表现为 Pending。把理由标准化成错误码，比让每个人 grep 控制器日志更接近平台。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-044",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-045",
@@ -563,8 +563,8 @@
       "account": "卡间经济学",
       "publishedLabel": "1小时前",
       "summary": "Model FLOPs Utilization 把实际算力除以峰值。低 MFU 可能是通信、数据加载、小 batch 或只是实现糟糕。先排除输入饥饿，再谈换卡、换并行。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-046",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-047",
@@ -575,8 +575,8 @@
       "account": "算力观察",
       "publishedLabel": "2小时前",
       "summary": "财务看见卡时，算法看见 token，产品看见合格回答。三层之间有废推理、重试和缓存命中。只优化第一层的团队，会在第三层把钱亏回去。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-047",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-048",
@@ -599,8 +599,8 @@
       "account": "产业观察",
       "publishedLabel": "昨天",
       "summary": "共用集群里，空闲、碎片、预留和故障都要有主人。没有摊销规则，每个团队都觉得自己在给别人买单。MFU 只是分子分母，分母怎么定义才是政治。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-049",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-050",
@@ -611,8 +611,8 @@
       "account": "模型前线",
       "publishedLabel": "昨天",
       "summary": "张量并行和流水线并行让卡「很忙」，但忙在等。NCCL 日志和 MFU 对不上时，先画一张跨节点流量图。很多所谓的模型问题，其实是拓扑问题。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-050",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-051",
@@ -635,8 +635,8 @@
       "account": "卡间经济学",
       "publishedLabel": "2天前",
       "summary": "抢占节省标价，但检查点、重排队和工程师时间是隐形账单。适合容错训练，不适合 decode 池。把 spot 比例写进成本模型，比写进宣传稿重要。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-052",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-053",
@@ -647,8 +647,8 @@
       "account": "评测复现组",
       "publishedLabel": "3天前",
       "summary": "INT8/FP8 改变了峰值和实际 FLOPs 的定义。继续用 FP16 峰值当分子，利用率会看起来「爆表」。考核前先锁定精度和峰值口径。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-053",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-054",
@@ -671,8 +671,8 @@
       "account": "硅星人Pro",
       "publishedLabel": "5天前",
       "summary": "一组卡 MFU 40% 但满载，往往好过一组卡 0% 在排队策略里睡大觉。容量规划要同时看利用率和等待时间，单看其中一个都会买错下一单。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-055",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-056",
@@ -683,8 +683,8 @@
       "account": "云原生指北",
       "publishedLabel": "5天前",
       "summary": "建议只保留：有效 FLOPs、峰值口径、数据等待、通信等待、队列等待。超过五条，周会就会变成指标展览。能解释成本的指标，才有资格上大屏。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-056",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-057",
@@ -719,8 +719,8 @@
       "account": "Serving 研究室",
       "publishedLabel": "一周前",
       "summary": "前缀命中会让 GPU 显得更闲，但用户体验和成本同时变好。若考核仍惩罚低利用率，团队会关掉缓存。指标必须与目标同向。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-059",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-060",
@@ -743,8 +743,8 @@
       "account": "国产芯观察",
       "publishedLabel": "1小时前",
       "summary": "新模型发布当晚，CUDA 世界往往已有 nightly。昇腾要的是图编译、算子、集合通信和推理引擎同一天齐套。Day0 是一份清单，不是一句口号。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-061",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-062",
@@ -755,8 +755,8 @@
       "account": "开源前线",
       "publishedLabel": "2小时前",
       "summary": "适配层越厚，覆盖越快，性能越容易停在「能跑」。薄适配依赖算子库成熟。团队应公开：这次 Day0 是能训、能推，还是只能前向。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-062",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-063",
@@ -779,8 +779,8 @@
       "account": "算力观察",
       "publishedLabel": "昨天",
       "summary": "没有等效 NVLink 的假设，KV 搬运成本要重写。很多国产方案在单机内容忍分离，跨机就退回一体。评估 Day0 服务能力，先问跨机 KV 的带宽和失败率。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-064",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-065",
@@ -791,8 +791,8 @@
       "account": "训练推理手记",
       "publishedLabel": "昨天",
       "summary": "模型并行把通信库推到前台。缺一个 allreduce 融合，MFU 能掉一个台阶。Day0 报告如果只贴 loss 曲线、不贴通信占比，等于没测。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-065",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-066",
@@ -815,8 +815,8 @@
       "account": "国产芯观察",
       "publishedLabel": "2天前",
       "summary": "在昇腾上手写 kernel 的回报曲线不同，图编译和融合才是主战场。把 CUDA 优化笔记原样搬过来，通常会失望。培训应从编译日志读起。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-067",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-068",
@@ -827,8 +827,8 @@
       "account": "评测复现组",
       "publishedLabel": "3天前",
       "summary": "数值误差在 perplexity 上像毛刺，在分类边界上像事故。Day0 必须带业务集，而不是只带公开 benchmark。对齐失败时，要能指出是算子、还是随机性。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-068",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-069",
@@ -851,8 +851,8 @@
       "account": "K8s 深夜食堂",
       "publishedLabel": "5天前",
       "summary": "切虚卡、切 NPU 内存、切虚拟化实例，每一种都影响 gang 和配额。Kueue 的资源名要和 plugin 暴露的一致，否则队列是空转。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-070",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-071",
@@ -863,8 +863,8 @@
       "account": "Infra 周报",
       "publishedLabel": "5天前",
       "summary": "权重到仓、图编译缓存、算子缺口、回退 CUDA 集群、对外口径。清单比战报重要。Day0 成功的定义应提前写死：哪个模型、哪种精度、哪条业务链路。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-071",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-072",
@@ -887,8 +887,8 @@
       "account": "机智流",
       "publishedLabel": "一周前",
       "summary": "自研引擎能贴硬件，插件能吃生态。2026 年更常见的是双轨：对外 API 对齐 vLLM，对内 kernel 走自研。用户只应看见同一套 Serving 语义。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-073",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-074",
@@ -899,8 +899,8 @@
       "account": "模型前线",
       "publishedLabel": "一周前",
       "summary": "特性矩阵里打钩很容易。交叉组合才是生产。文中记录了若干「单独能开、一起就回退」的路径，提醒评估不要只测单开关。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-074",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-075",
@@ -923,8 +923,8 @@
       "account": "评测复现组",
       "publishedLabel": "1小时前",
       "summary": "同一套 benchmark，换提示词、换解码参数、换污染数据，名次就会搬家。独立复现的价值不是打脸，而是给出可审计的设置。没有设置，就没有分数。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-076",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-077",
@@ -935,8 +935,8 @@
       "account": "模型前线",
       "publishedLabel": "2小时前",
       "summary": "子集、版本、中文翻译和泄漏检查，每一项都能让分数跳动。写复现报告的第一页应该是数据集指纹，而不是柱状图。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-077",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-078",
@@ -959,8 +959,8 @@
       "account": "开源前线",
       "publishedLabel": "昨天",
       "summary": "n-gram 重叠、搜索引擎快照、竞赛题原题，是复现组的日常。发现泄漏不是为了道德审判，而是给分数加注释：这题可能被看见过。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-079",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-080",
@@ -971,8 +971,8 @@
       "account": "硅星人Pro",
       "publishedLabel": "昨天",
       "summary": "把英文基准翻成中文，难度和答案空间都变了。用翻译集给中文模型打「国际分」，既不公平，也不可比。独立复现应分开报告。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-080",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-081",
@@ -995,8 +995,8 @@
       "account": "云原生指北",
       "publishedLabel": "2天前",
       "summary": "权重、tokenizer、聊天模板、引擎版本，全部写入清单。一次评测应能在另一台机器上重放。做不到重放的分数，只是一次表演。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-082",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-083",
@@ -1007,8 +1007,8 @@
       "account": "算力观察",
       "publishedLabel": "3天前",
       "summary": "同样的模型名，可能跑在不同量化、不同投机设置、不同批大小上。独立复现要把硬件和 Serving 配置写成和数据集同等重要的一等公民。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-083",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-084",
@@ -1031,8 +1031,8 @@
       "account": "K8s 深夜食堂",
       "publishedLabel": "5天前",
       "summary": "同样的错解，在不同沙箱限额下有的算过、有的算挂。复现必须公布 CPU、内存、时间。否则 LiveCodeBench 只是本地运气。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-085",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-086",
@@ -1043,8 +1043,8 @@
       "account": "Serving 研究室",
       "publishedLabel": "5天前",
       "summary": "针能捞到，不代表能在噪声里保持推理。多跳、变更指令、中间插入冲突事实，比单针更接近产品。独立复现不要只复现最出名的那一张图。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-086",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-087",
@@ -1067,8 +1067,8 @@
       "account": "机智流",
       "publishedLabel": "一周前",
       "summary": "模型周更，评测如果只做一次，档案会腐烂。把固定子集做成扫描任务，和赛道扫描同一节奏，比追每一个新榜更可持续。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-088",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-089",
@@ -1079,8 +1079,8 @@
       "account": "开源前线",
       "publishedLabel": "一周前",
       "summary": "框架默认的 few-shot、模板和后处理，本身就是一种立场。换 harness 不换模型，分数也能跳。独立复现应锁定框架版本，或同时报告两套。",
-      "url": "https://mp.weixin.qq.com/s/2026-09-12-weread-089",
-      "hasDirectLink": true
+      "url": "",
+      "hasDirectLink": false
     },
     {
       "id": "2026-09-12-weread-090",

@@ -21,7 +21,8 @@ export function ReadingPanel({
           </p>
           <h2 className="mt-4 text-2xl tracking-tight text-ink">选择一篇文章</h2>
           <p className="mt-3 max-w-sm text-sm leading-7 text-muted">
-            每篇都会展示公众号与发布时间。有验证直链时「打开原文」跳转微信；否则通过搜狗微信搜索该标题。
+            每篇展示公众号与发布时间。仅当数据里存在已验证的 mp 或搜狗 link
+            跳转时，才显示可点击的「打开原文」。
           </p>
         </div>
         <p className="text-xs text-muted">扫描 {scanId}</p>
@@ -55,16 +56,29 @@ export function ReadingPanel({
         </div>
         <div>
           <dt className="text-xs text-marrs">发布时间</dt>
-          <dd className="mt-1 text-ink">{article.publishedLabel}</dd>
+          <dd className="mt-1 text-ink">
+            <time dateTime={article.scanDate}>{article.publishedLabel}</time>
+          </dd>
         </div>
         <div className="sm:col-span-2">
           <dt className="text-xs text-marrs">检索词</dt>
           <dd className="mt-1 text-ink">{article.query}</dd>
         </div>
         <div className="sm:col-span-2">
-          <dt className="text-xs text-marrs">链接</dt>
+          <dt className="text-xs text-marrs">原文链接</dt>
           <dd className="mt-1 text-ink">
-            {link.kind === "mp-direct" ? "已验证公众号直链" : "搜狗微信检索（待补直链）"}
+            {link ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-marrs hover:text-marrs-deep"
+              >
+                {link.href}
+              </a>
+            ) : (
+              "待收录（不可用搜索页代替）"
+            )}
           </dd>
         </div>
       </dl>

@@ -2,7 +2,9 @@
 
 赛道扫描（Track Scan）：把一次关键词扫描做成可浏览的静态站点。当前仓库在 `main` 上从这份说明起步，站点跑在仓库根目录。
 
-品牌色 Marrs Green `#01847E`，画布 `#f6f5f2`，阅读区用白纸卡片。界面为中文。文章选择走 URL `?article=<id>`，不用 Zustand / `useState` 记「正在读哪篇」。Zustand 只存筛选：关键词、是否仅看可打开原文、搜索框。
+品牌色 Marrs Green `#01847E`，画布 `#f6f5f2`，阅读区用白纸卡片。界面为中文。文章选择走 URL `?article=<id>`。Zustand 只存检索词 chip 与关键词搜索。
+
+**链接策略：**「打开原文」仅指向已验证的 `mp.weixin.qq.com` 或搜狗 `link` 跳转；**禁止**搜狗搜索页。缺链时 UI 显示「原文链接待收录」，不删文章行。
 
 ## 本地运行
 
@@ -17,6 +19,11 @@ npm run dev
 - `/scans/2026-09-12` 一次扫描：筛选 + 列表 + 阅读面板
 - `/scans/2026-09-12?article=2026-09-12-weread-001` 打开指定文章（刷新可复现）
 - `/about` 数据说明
+- `/accounts` 追踪公众号与下载说明
+- `/llms.txt` GEO 摘要
+- `/sitemap.xml` / `/robots.txt`
+
+环境变量（生产 SEO canonical）：`NEXT_PUBLIC_SITE_URL=https://daily-news-tee3.vercel.app`
 
 生产构建：
 
@@ -97,7 +104,7 @@ node scripts/seed-catalog.mjs
 1. 用 [Vercel](https://vercel.com/new) 导入 `zhuima/daily-news`。
 2. Framework Preset 选 Next.js，根目录保持仓库根（不要填子目录）。
 3. Build Command：`npm run build`；Output 用 Next.js 默认即可。
-4. 不需要环境变量。数据在构建时打进产物，更新 `data/index.json` 后重新部署即生效。
+4. 建议设置 `NEXT_PUBLIC_SITE_URL` 为生产域名（canonical / sitemap）。数据在构建时打进产物。
 
 CLI：
 
@@ -105,6 +112,19 @@ CLI：
 npx vercel
 ```
 
+## 公众号追踪与正文下载
+
+- 追踪列表：`data/accounts.json`，页面 `/accounts`
+- 单篇正文：[x-fetcher](https://github.com/zhuima/x-fetcher) 的 `fetch_wechat.py`（**单 mp URL**，非公众号历史）
+- 批量（仅已收录链接）：
+
+```bash
+export X_FETCHER_PATH=/path/to/x-fetcher
+node scripts/download-account-bodies.mjs --account "水金聊投资"
+```
+
+输出：`data/downloads/<slug>/`
+
 ## 技术栈
 
-Next.js App Router、TypeScript、Tailwind CSS、Zustand（仅筛选）。
+Next.js App Router、TypeScript、Tailwind CSS、Zustand（仅筛选）、JSON-LD / sitemap / llms.txt。

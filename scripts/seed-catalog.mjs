@@ -785,15 +785,15 @@ function isVerifiableUrl(url) {
   ) {
     return false;
   }
+  if (/weixin\.sogou\.com\/weixin\?/i.test(trimmed)) return false;
+  if (/weixin\.sogou\.com\/link/i.test(trimmed)) return true;
   if (trimmed.includes("mp.weixin.qq.com")) {
     return (
       trimmed.includes("__biz=") ||
       (trimmed.includes("mid=") && trimmed.includes("sn="))
     );
   }
-  return (
-    trimmed.includes("weixin.sogou.com") || trimmed.includes("weread.qq.com")
-  );
+  return false;
 }
 
 const articles = rows.map((row, index) => {
@@ -808,7 +808,7 @@ const articles = rows.map((row, index) => {
     account: row.account,
     publishedLabel: row.publishedLabel,
     summary: row.summary,
-    url,
+    url: isVerifiableUrl(url) ? url : "",
     hasDirectLink: isVerifiableUrl(url),
   };
 });
@@ -839,7 +839,7 @@ const catalog = {
       sources: ["weread"],
       articleCount: articles.length,
       notes:
-        "微信读书关键词扫描样例。全部条目保留；有验证 mp 直链的直达微信，其余通过搜狗微信检索补链。",
+        "微信读书关键词扫描样例。全部条目保留；仅已验证 mp / 搜狗 link 可打开原文，禁止搜索页兜底。",
     },
   ],
   articles,

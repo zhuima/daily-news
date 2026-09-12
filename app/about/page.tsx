@@ -1,13 +1,42 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "关于数据",
-};
+  description:
+    "赛道扫描的数据来源、URL 策略、SEO/GEO 说明，以及如何使用 x-fetcher 下载单篇微信公众号正文。",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
     <main className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-8 sm:py-20">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "打开原文链接从哪里来？",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "仅使用 data/index.json 中已验证的 mp.weixin.qq.com 或搜狗 link 跳转 URL。禁止用搜狗搜索页作为打开原文。",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "如何下载文章正文？",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "使用 github.com/zhuima/x-fetcher 的 fetch_wechat.py 对单篇 mp URL 抓取；账号维度批量请运行 scripts/download-account-bodies.mjs（仅已收录链接）。",
+              },
+            },
+          ],
+        }}
+      />
       <p className="font-display text-xs tracking-[0.2em] text-marrs uppercase">
         About
       </p>
@@ -16,53 +45,60 @@ export default function AboutPage() {
         <section>
           <h2 className="text-xl tracking-tight text-ink">这不是实时新闻站</h2>
           <p className="mt-3">
-            「赛道扫描」把某一次关键词扫描的结果做成静态归档。当前仓库只提交一份{" "}
+            「赛道扫描」把某一次关键词扫描的结果做成静态归档。当前仓库提交{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               data/index.json
             </code>
-            ，页面在构建时读入，不连微信、也不在服务器上再抓一遍。
+            、{" "}
+            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
+              data/accounts.json
+            </code>
+            ，页面在构建时读入。
           </p>
         </section>
         <section>
-          <h2 className="text-xl tracking-tight text-ink">一次扫描里有什么</h2>
+          <h2 className="text-xl tracking-tight text-ink">链接策略（禁止搜索页）</h2>
           <p className="mt-3">
-            每个 scan 有日期、标题、来源和篇数。列表保留扫描到的全部文章，并在 UI 上展示公众号、发布时间与链接操作。已有验证过的{" "}
+            「打开原文」只允许跳转到已验证的{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               mp.weixin.qq.com
             </code>{" "}
-            直链时「打开原文」直达微信；尚未补全 url 的条目会通过搜狗微信搜索标题与公众号，便于后续人工补链。
+            或{" "}
+            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
+              weixin.sogou.com/link
+            </code>
+            文章跳转。合成占位路径与搜狗搜索页不会出现在 CTA 中；缺链条目显示「原文链接待收录」。
           </p>
         </section>
         <section>
-          <h2 className="text-xl tracking-tight text-ink">为什么用 URL 选文章</h2>
+          <h2 className="text-xl tracking-tight text-ink">URL 选文章</h2>
           <p className="mt-3">
-            阅读面板只认{" "}
+            阅读面板使用{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               ?article=&lt;id&gt;
             </code>
-            。服务端页面读这个参数，再把{" "}
-            <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
-              selectedId
-            </code>{" "}
-            传给列表和面板。刷新、分享、后退都指向同一篇，不把「正在读哪篇」放进 Zustand 或组件 state。
-          </p>
-          <p className="mt-3">
-            Zustand 只存筛选：检索词 chip 与关键词搜索框。
+            。Zustand 只存检索词与关键词搜索。
           </p>
         </section>
         <section>
-          <h2 className="text-xl tracking-tight text-ink">「打开原文」</h2>
+          <h2 className="text-xl tracking-tight text-ink">SEO / GEO</h2>
           <p className="mt-3">
-            「打开原文」在有条目直链时跳转微信；否则跳转搜狗微信检索，同一按钮文案，避免无链接的死胡同。
+            站点提供 sitemap.xml、robots.txt、Open Graph/Twitter 元数据、JSON-LD（WebSite、CollectionPage、NewsArticle、FAQPage）以及{" "}
+            <Link href="/llms.txt" className="text-marrs">
+              /llms.txt
+            </Link>{" "}
+            供检索与生成式引擎引用。
           </p>
         </section>
         <section>
-          <h2 className="text-xl tracking-tight text-ink">如何追加一次扫描</h2>
-          <ol className="mt-3 list-decimal space-y-2 pl-5">
-            <li>在 scans 数组增加一条 id / date / title / sources / articleCount。</li>
-            <li>把该日文章写入 articles，id 建议 <code>日期-来源-序号</code>。</li>
-            <li>articleCount 与当日文章数保持一致，然后重新构建。</li>
-          </ol>
+          <h2 className="text-xl tracking-tight text-ink">公众号追踪与正文</h2>
+          <p className="mt-3">
+            见{" "}
+            <Link href="/accounts" className="text-marrs">
+              /accounts
+            </Link>
+            。x-fetcher 抓取单篇 mp 文章，不替代微信客户端的公众号历史接口。
+          </p>
         </section>
         <p>
           <Link href="/" className="text-marrs hover:text-marrs-deep">

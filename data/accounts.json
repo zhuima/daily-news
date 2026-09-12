@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-09-12T21:10:00+08:00",
+  "accounts": [
+    {
+      "slug": "infra",
+      "name": "Infra 周报",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "k8s",
+      "name": "K8s 深夜食堂",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "serving",
+      "name": "Serving 研究室",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5LqR5Y6f55Sf5oyH5YyX",
+      "name": "云原生指北",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5Lqn5Lia6KeC5a-f",
+      "name": "产业观察",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5Y2h6Ze057uP5rWO5a2m",
+      "name": "卡间经济学",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5Zu95Lqn6Iqv6KeC5a-f",
+      "name": "国产芯观察",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5byA5rqQ5YmN57q_",
+      "name": "开源前线",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5py65pm65rWB",
+      "name": "机智流",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5qih5Z6L5YmN57q_",
+      "name": "模型前线",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "5rC06YeR6IGK5oqV6LWE",
+      "name": "水金聊投资",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "pro",
+      "name": "硅星人Pro",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "566X5Yqb6KeC5a-f",
+      "name": "算力观察",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "6K6t57uD5o6o55CG5omL6K6w",
+      "name": "训练推理手记",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "6K-E5rWL5aSN546w57uE",
+      "name": "评测复现组",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    },
+    {
+      "slug": "6LCD5bqm5Zmo5pyt6K6w",
+      "name": "调度器札记",
+      "notes": "",
+      "addedAt": "2026-09-12"
+    }
+  ]
+}
