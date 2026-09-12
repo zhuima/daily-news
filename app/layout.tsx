@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Source_Serif_4, Geist } from "next/font/google";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  absoluteUrl,
+  getSiteUrl,
+} from "@/lib/site";
 import "./globals.css";
 
 const geist = Geist({
@@ -21,12 +29,33 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "赛道扫描 · daily-news",
-    template: "%s · 赛道扫描",
+    default: `${SITE_NAME} · daily-news`,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "从微信读书等来源扫描赛道动态，按日期归档阅读。云原生训推、算力成本、模型测评。",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    type: "website",
+    locale: "zh_CN",
+    url: absoluteUrl("/"),
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const viewport: Viewport = {
@@ -36,12 +65,36 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const siteUrl = getSiteUrl();
   return (
     <html
       lang="zh-CN"
       className={`${geist.variable} ${newsreader.variable} ${sourceSerif.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-canvas text-ink">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": `${siteUrl}/#website`,
+                url: siteUrl,
+                name: SITE_NAME,
+                description: SITE_DESCRIPTION,
+                inLanguage: "zh-CN",
+                publisher: { "@id": `${siteUrl}/#organization` },
+              },
+              {
+                "@type": "Organization",
+                "@id": `${siteUrl}/#organization`,
+                name: SITE_NAME,
+                url: siteUrl,
+                description: SITE_TAGLINE,
+              },
+            ],
+          }}
+        />
         <SiteHeader />
         <div className="flex flex-1 flex-col">{children}</div>
         <SiteFooter />

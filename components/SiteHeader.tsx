@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const nav = [
   { href: "/", label: "扫描" },
+  { href: "/accounts", label: "公众号" },
   { href: "/about", label: "关于" },
 ] as const;
 
