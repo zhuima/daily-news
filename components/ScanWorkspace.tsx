@@ -15,20 +15,26 @@ export function ScanWorkspace({
   queries,
   selectedId,
   selectedArticle,
+  initialQuery = "",
 }: {
   scan: Scan;
   articles: Article[];
   queries: string[];
   selectedId?: string;
   selectedArticle?: Article;
+  initialQuery?: string;
 }) {
   const query = useFilters((s) => s.query);
   const search = useFilters((s) => s.search);
   const reset = useFilters((s) => s.reset);
+  const setQuery = useFilters((s) => s.setQuery);
 
   useEffect(() => {
     reset();
-  }, [scan.id, reset]);
+    if (initialQuery.trim()) {
+      setQuery(initialQuery.trim());
+    }
+  }, [scan.id, reset, initialQuery, setQuery]);
 
   const visible = useMemo(() => {
     const needle = search.trim().toLowerCase();

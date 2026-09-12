@@ -7,7 +7,6 @@ import {
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_TAGLINE,
-  absoluteUrl,
   getSiteUrl,
 } from "@/lib/site";
 import "./globals.css";
@@ -36,13 +35,15 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  manifest: "/manifest.webmanifest",
   alternates: {
-    canonical: absoluteUrl("/"),
+    types: {
+      "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME} RSS` }],
+    },
   },
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: absoluteUrl("/"),
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
@@ -52,10 +53,7 @@ export const metadata: Metadata = {
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -72,6 +70,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geist.variable} ${newsreader.variable} ${sourceSerif.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-canvas text-ink">
+        <a href="#main-content" className="skip-link">
+          跳到主要内容
+        </a>
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -84,6 +85,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 description: SITE_DESCRIPTION,
                 inLanguage: "zh-CN",
                 publisher: { "@id": `${siteUrl}/#organization` },
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: `${siteUrl}/#site-search`,
+                  },
+                  "query-input": "required name=search_term_string",
+                },
               },
               {
                 "@type": "Organization",
@@ -96,7 +105,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
         <SiteHeader />
-        <div className="flex flex-1 flex-col">{children}</div>
+        <div id="main-content" className="flex flex-1 flex-col">
+          {children}
+        </div>
         <SiteFooter />
       </body>
     </html>
