@@ -49,11 +49,11 @@ export default function AboutPage() {
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               data/index.json
             </code>
-            、{" "}
+            ；公众号追踪列表在运行时写入 Vercel KV（种子见{" "}
             <code className="rounded-sm bg-paper px-1.5 py-0.5 ring-1 ring-line">
               data/accounts.json
             </code>
-            ，页面在构建时读入。
+            ）。
           </p>
         </section>
         <section>
