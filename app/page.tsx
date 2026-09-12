@@ -1,49 +1,51 @@
 import { ScanCard } from "@/components/ScanCard";
-import { getCatalog, getScans } from "@/lib/data";
+import { HomeSearch } from "@/components/HomeSearch";
+import { getAllPublishableArticles, getCatalog, getScans } from "@/lib/data";
 import { formatScanDate } from "@/lib/format";
 
 export default function HomePage() {
   const scans = getScans();
   const catalog = getCatalog();
   const articleTotal = catalog.articles.length;
-  const directLinkTotal = catalog.articles.filter(
-    (article) => article.hasDirectLink,
-  ).length;
   const latestScan = scans[0];
+  const articles = getAllPublishableArticles();
 
   return (
     <main>
-      <section className="mx-auto w-full max-w-6xl px-5 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-12">
-        <div className="max-w-2xl border-b border-line pb-10">
-          <h1 className="text-4xl tracking-tight text-ink sm:text-5xl">
+      <section className="bg-marrs text-white">
+        <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+          <p className="font-display text-xs tracking-[0.28em] text-white/70 uppercase">
+            Track Scan
+          </p>
+          <h1 className="mt-4 max-w-2xl text-4xl leading-tight tracking-tight sm:text-5xl">
             赛道扫描
           </h1>
-          <p className="mt-4 text-lg leading-8 text-muted">
-            微信读书等来源的关键词扫描归档。按日期浏览，用链接打开正在读的那一篇。
+          <p className="mt-5 max-w-xl text-lg leading-8 text-white/85">
+            从微信读书等来源扫出一条赛道。按日期归档，用链接记住正在读的那一篇。
           </p>
-          <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
+          <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/20 pt-8 text-sm">
             <div>
-              <dt className="text-marrs">已归档扫描</dt>
-              <dd className="mt-1 text-ink">{scans.length} 次</dd>
+              <dt className="text-white/65">已归档扫描</dt>
+              <dd className="mt-1 text-white">{scans.length} 次</dd>
             </div>
             <div>
-              <dt className="text-marrs">文章条目</dt>
-              <dd className="mt-1 text-ink">{articleTotal} 篇</dd>
-            </div>
-            <div>
-              <dt className="text-marrs">可打开原文</dt>
-              <dd className="mt-1 text-ink">{directLinkTotal} 篇</dd>
+              <dt className="text-white/65">可打开原文</dt>
+              <dd className="mt-1 text-white">{articleTotal} 篇</dd>
             </div>
             {latestScan ? (
               <div>
-                <dt className="text-marrs">最近更新</dt>
-                <dd className="mt-1 text-ink">
+                <dt className="text-white/65">最近更新</dt>
+                <dd className="mt-1 text-white">
                   {formatScanDate(latestScan.date)}
                 </dd>
               </div>
             ) : null}
           </dl>
         </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-12">
+        <HomeSearch articles={articles} />
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">

@@ -19,11 +19,7 @@ export function ReadingPanel({
           </p>
           <h2 className="mt-4 text-2xl tracking-tight text-ink">选择一篇文章</h2>
           <p className="mt-3 max-w-sm text-sm leading-7 text-muted">
-            左侧列表通过 URL 参数{" "}
-            <code className="rounded-sm bg-canvas px-1.5 py-0.5 text-xs">
-              ?article=
-            </code>{" "}
-            打开阅读面板。刷新或分享链接会停留在同一篇。
+            列表中的条目均含公众号、发布时间与可验证原文链接。点击后在右侧打开摘要，并用「打开原文」跳转微信文章。
           </p>
         </div>
         <p className="text-xs text-muted">扫描 {scanId}</p>
@@ -48,31 +44,33 @@ export function ReadingPanel({
       <h2 className="mt-4 text-[1.65rem] leading-snug tracking-tight text-ink">
         {article.title}
       </h2>
-      <p className="mt-3 text-sm text-muted">
-        {article.account}
-        <span className="mx-2">·</span>
-        {article.publishedLabel}
-        <span className="mx-2">·</span>
-        {article.query}
-      </p>
+      <dl className="mt-4 grid gap-3 rounded-sm border border-line bg-canvas px-4 py-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="text-xs text-marrs">公众号</dt>
+          <dd className="mt-1 text-ink">{article.account}</dd>
+        </div>
+        <div>
+          <dt className="text-xs text-marrs">发布时间</dt>
+          <dd className="mt-1 text-ink">{article.publishedLabel}</dd>
+        </div>
+        <div className="sm:col-span-2">
+          <dt className="text-xs text-marrs">检索词</dt>
+          <dd className="mt-1 text-ink">{article.query}</dd>
+        </div>
+      </dl>
       <p className="mt-6 flex-1 text-[15px] leading-8 text-ink/85">
         {article.summary}
       </p>
       <div className="mt-8 border-t border-line pt-6">
-        {article.hasDirectLink && article.url ? (
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center rounded-sm bg-marrs px-5 text-sm text-white transition-colors hover:bg-marrs-deep"
-          >
-            打开原文
-          </a>
-        ) : (
-          <p className="text-sm leading-7 text-muted">
-            这篇没有可直达的公众号链接。微信侧可能未开放外链，或扫描时只保留了摘要。
-          </p>
-        )}
+        <a
+          href={article.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-11 items-center rounded-sm bg-marrs px-5 text-sm text-white transition-colors hover:bg-marrs-deep"
+        >
+          打开原文
+        </a>
+        <p className="mt-3 break-all text-xs text-muted">{article.url}</p>
       </div>
     </article>
   );
