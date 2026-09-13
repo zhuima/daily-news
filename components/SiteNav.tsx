@@ -18,7 +18,7 @@ export function SiteNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden items-center gap-0.5 md:flex" aria-label="主导航">
+    <nav className="hidden items-center gap-5 md:flex" aria-label="主导航">
       {nav.map((item) => {
         const active = isActive(pathname, item.href);
         return (
@@ -26,23 +26,13 @@ export function SiteNav() {
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`interactive focus-ring px-3.5 py-2 text-sm font-medium ${
-              active
-                ? "bg-marrs text-white"
-                : "text-muted hover:bg-paper hover:text-marrs"
-            }`}
-            style={{ borderRadius: "var(--radius-inner)" }}
+            className={`nav-link focus-ring ${active ? "nav-link-active" : ""}`}
           >
             {item.label}
           </Link>
         );
       })}
-      <span className="mx-2 h-4 w-px bg-line" aria-hidden />
-      <Link
-        href="/#site-search"
-        className="interactive focus-ring px-3.5 py-2 text-sm text-muted hover:text-marrs"
-        style={{ borderRadius: "var(--radius-inner)" }}
-      >
+      <Link href="/#site-search" className="nav-link focus-ring">
         搜索
       </Link>
     </nav>

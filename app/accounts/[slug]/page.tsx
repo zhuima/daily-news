@@ -35,7 +35,7 @@ export default async function AccountDetailPage({
   const pageUrl = absoluteUrl(`/accounts/${slug}`);
 
   return (
-    <main className="editorial-container pt-12 pb-16 sm:pt-16 sm:pb-24">
+    <main className="docs-container pt-10 pb-16 sm:pt-14 sm:pb-24">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -54,7 +54,7 @@ export default async function AccountDetailPage({
       </nav>
 
       <header className="mt-8 max-w-[65ch]">
-        <h1 className="text-4xl font-medium tracking-tight text-ink">{account.name}</h1>
+        <h1 className="text-[2rem] font-semibold tracking-tight text-ink">{account.name}</h1>
         <p className="mt-3 text-sm tabular-nums text-muted">
           {articles.length} 篇扫描条目 · 追踪始于{" "}
           <time dateTime={account.addedAt}>{account.addedAt}</time>
@@ -64,19 +64,13 @@ export default async function AccountDetailPage({
         ) : null}
       </header>
 
-      <section className="surface-inset mt-8 p-5 text-sm leading-7">
+      <section className="meta-block mt-8 p-5 text-sm leading-7">
         <h2 className="text-base font-medium text-ink">下载正文（本地操作）</h2>
         <p className="mt-2 text-muted">
           x-fetcher 仅支持<strong className="text-ink">单篇 mp URL</strong>
           。对已收录链接运行：
         </p>
-        <pre
-          className="mt-3 overflow-x-auto bg-paper p-4 text-xs"
-          style={{
-            borderRadius: "var(--radius-inner)",
-            boxShadow: "inset 0 0 0 1px var(--line)",
-          }}
-        >
+        <pre className="mt-3 overflow-x-auto border border-line bg-paper p-4 text-xs">
 {`node scripts/download-account-bodies.mjs --account "${account.name}"`}
         </pre>
       </section>
@@ -85,11 +79,11 @@ export default async function AccountDetailPage({
         <h2 id="account-articles-title" className="text-xl font-medium tracking-tight">
           文章列表
         </h2>
-        <ul className="surface-panel mt-6 divide-y divide-line">
+        <ul className="mt-4 divide-y divide-line border-y border-line">
           {articles.map((article) => {
             const link = resolveArticleLink(article);
             return (
-              <li key={article.id} className="px-5 py-4">
+              <li key={article.id} className="py-4">
                 <article>
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="min-w-0 flex-1 text-[15px] leading-6 text-ink">
@@ -123,7 +117,7 @@ export default async function AccountDetailPage({
                         aria-label={`打开原文：${article.title}`}
                         className="interactive focus-ring text-sm font-medium text-marrs hover:text-marrs-deep"
                       >
-                        打开原文 →
+                        查看原文 →
                       </a>
                     ) : (
                       <span className="text-sm text-muted">原文链接待收录</span>

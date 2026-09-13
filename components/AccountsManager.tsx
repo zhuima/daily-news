@@ -148,7 +148,7 @@ export function AccountsManager({
   return (
     <div className="space-y-10">
       <section
-        className="surface-inset p-6 sm:p-7"
+        className="meta-block p-5 sm:p-6"
         aria-labelledby="accounts-admin-title"
       >
         <h2 id="accounts-admin-title" className="text-lg font-medium text-ink">
@@ -196,7 +196,7 @@ export function AccountsManager({
 
       {unlocked ? (
         <>
-        <section className="surface-raised p-6 sm:p-7">
+        <section className="border border-line bg-paper p-5 sm:p-6">
           <h2 className="text-lg font-medium text-ink">导入文章链接（wechatDownload）</h2>
           <p className="mt-2 text-sm leading-7 text-muted">
             上传 <code className="rounded bg-canvas px-1">export_article_data</code>{" "}
@@ -294,7 +294,7 @@ export function AccountsManager({
           </div>
         </section>
 
-        <section className="surface-raised p-6 sm:p-7">
+        <section className="border border-line bg-paper p-5 sm:p-6">
           <h2 className="text-lg font-medium text-ink">添加公众号</h2>
           <form onSubmit={handleAdd} className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="text-sm sm:col-span-2">
@@ -363,14 +363,14 @@ export function AccountsManager({
           </button>
         </div>
         {accounts.length === 0 ? (
-          <div className="surface-inset mt-6 px-6 py-16 text-center">
-            <p className="text-[13px] font-medium text-marrs">还没有追踪公众号</p>
+          <div className="mt-6 border-t border-line py-12">
+            <p className="text-sm font-medium text-ink">还没有追踪公众号</p>
             <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-7 text-muted">
               解锁管理后即可添加名称与 slug，导入 wechatDownload 导出的链接。
             </p>
           </div>
         ) : (
-        <ul className="surface-panel mt-6 divide-y divide-line">
+        <ul className="mt-4 divide-y divide-line border-y border-line">
           {accounts.map((account) => {
             const stats = articleStats[account.name] ?? { total: 0, linked: 0 };
             return (

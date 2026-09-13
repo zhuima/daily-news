@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { JsonLd } from "@/components/JsonLd";
 import { ScanWorkspace } from "@/components/ScanWorkspace";
-import {
-  isAllowedArticleUrl,
-  publishedDateTime,
-  resolveArticleLink,
-} from "@/lib/articles";
+import { publishedDateTime, resolveArticleLink } from "@/lib/articles";
 import {
   getArticle,
   getArticlesByScan,
@@ -70,7 +66,6 @@ export default async function ScanPage({
   const selectedArticle = await getArticle(selectedId);
   const siteUrl = getSiteUrl();
   const scanUrl = absoluteUrl(`/scans/${scanId}`);
-  const linkedCount = articles.filter((a) => isAllowedArticleUrl(a.url)).length;
 
   const graph: Record<string, unknown>[] = [
     {
@@ -135,7 +130,7 @@ export default async function ScanPage({
   return (
     <main className="flex flex-1 flex-col">
       <JsonLd data={{ "@context": "https://schema.org", "@graph": graph }} />
-      <div className="editorial-container pt-6 pb-2">
+      <div className="docs-container pt-6 pb-0">
         <Breadcrumbs
           items={[
             { label: "首页", href: "/" },
@@ -143,9 +138,6 @@ export default async function ScanPage({
             { label: scan.title },
           ]}
         />
-        <p className="mt-3 text-xs tabular-nums text-muted">
-          {scan.date} · {articles.length} 篇 · {linkedCount} 条可开原文
-        </p>
       </div>
       <ScanWorkspace
         scan={scan}

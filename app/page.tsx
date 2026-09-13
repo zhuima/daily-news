@@ -79,187 +79,180 @@ export default async function HomePage() {
         }}
       />
 
-      <section
-        className="border-b border-line bg-marrs text-white"
-        aria-labelledby="home-hero-title"
-      >
-        <div className="editorial-container grid gap-12 pt-12 pb-16 sm:pt-16 sm:pb-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <div>
-            <p className="type-kicker text-white/80">
-              关键词扫描归档
-            </p>
-            <h1
-              id="home-hero-title"
-              className="type-display mt-5 max-w-2xl text-4xl sm:text-5xl lg:text-[3.5rem]"
-            >
-              赛道扫描
-            </h1>
-            <p className="type-prose mt-6 text-lg leading-8 text-white/88">
-              把一次关键词扫描变成可引用的阅读档案：公众号、发布时间、摘要与可验证原文链接，深链分享不断档。
-            </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              {latestScan ? (
-                <Link href={`/scans/${latestScan.id}`} className="btn-on-marrs">
-                  打开最新扫描
-                </Link>
-              ) : null}
-              <Link href="/accounts" className="btn-ghost">
-                管理公众号
+      <div className="docs-container pt-10 pb-16 sm:pt-14 sm:pb-24">
+        <header className="max-w-[40rem]">
+          <h1
+            id="home-hero-title"
+            className="text-[2rem] font-semibold tracking-tight text-ink sm:text-[2.25rem]"
+          >
+            赛道扫描
+          </h1>
+          <p className="type-lead mt-4">
+            把一次关键词扫描变成可引用的阅读档案：公众号、发布时间、摘要与可验证原文链接。
+          </p>
+          <p className="mt-4 text-[13px] tabular-nums text-muted">
+            {scans.length} 个扫描批次
+            <span className="mx-2 text-line">·</span>
+            {catalog.articles.length} 篇文章
+            <span className="mx-2 text-line">·</span>
+            {linkedTotal} 条已验证直链
+            <span className="mx-2 text-line">·</span>
+            {topics.length} 个检索词
+          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {latestScan ? (
+              <Link href={`/scans/${latestScan.id}`} className="btn-solid">
+                打开最新扫描
               </Link>
-            </div>
+            ) : null}
+            <Link href="/accounts" className="btn-ghost">
+              管理公众号
+            </Link>
           </div>
-          <dl className="grid grid-cols-2 overflow-hidden border border-white/20 bg-white/[0.06]">
-            {[
-              { label: "扫描批次", value: scans.length },
-              { label: "文章条目", value: catalog.articles.length },
-              { label: "已验证直链", value: linkedTotal },
-              { label: "检索词", value: topics.length },
-            ].map((stat, index) => (
-              <div
-                key={stat.label}
-                className={`px-5 py-6 ${index % 2 === 0 ? "border-r border-white/20" : ""} ${index < 2 ? "border-b border-white/20" : ""}`}
-              >
-                <dt className="text-[13px] font-medium text-white/68">{stat.label}</dt>
-                <dd className="mt-2 text-3xl font-medium tabular-nums tracking-tight">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
+        </header>
 
-      {featured && featuredLink ? (
-        <section className="editorial-container pt-12 pb-4 sm:pt-16" aria-labelledby="featured-title">
-          <div className="grid gap-7 border-l-[3px] border-marrs bg-paper py-7 pr-6 pl-6 shadow-[var(--shadow-ink)] sm:grid-cols-[1fr_auto] sm:items-end sm:py-9 sm:pr-9 sm:pl-8">
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-[13px] font-medium text-marrs">推荐阅读</p>
-                <ArticleScoreChip article={featured} />
-              </div>
-              <h2 id="featured-title" className="mt-3 text-2xl font-medium leading-snug tracking-tight sm:text-[1.75rem]">
+        <section
+          id="site-search"
+          className="mt-12 max-w-[40rem]"
+          aria-labelledby="home-search-title"
+        >
+          <h2 id="home-search-title" className="text-lg font-semibold tracking-tight">
+            全站检索
+          </h2>
+          <p className="mt-2 text-sm leading-7 text-muted">
+            按标题、公众号、检索词或摘要搜索归档条目。
+          </p>
+          <div className="mt-4">
+            <HomeSearch articles={articles} />
+          </div>
+        </section>
+
+        {featured && featuredLink ? (
+          <section
+            className="mt-12 max-w-[40rem] border-t border-line pt-8"
+            aria-labelledby="featured-title"
+          >
+            <p className="text-[13px] text-muted">推荐阅读</p>
+            <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
+              <h2
+                id="featured-title"
+                className="text-[1.15rem] font-medium leading-snug tracking-tight"
+              >
                 <Link
                   href={`/scans/${featured.scanDate}?article=${encodeURIComponent(featured.id)}`}
-                  className="interactive focus-ring hover:text-marrs"
+                  className="focus-ring hover:text-marrs"
                 >
                   {featured.title}
                 </Link>
               </h2>
-              <p className="mt-3 text-sm text-muted">
-                {featured.account}
-                <span className="mx-2">·</span>
-                <time dateTime={featured.scanDate}>{featured.publishedLabel}</time>
-                <span className="mx-2">·</span>
-                {featured.query}
-              </p>
-              <p className="type-prose mt-4 line-clamp-2 text-sm leading-7 text-ink/80">
-                {featured.summary}
-              </p>
+              <ArticleScoreChip article={featured} />
             </div>
-            <a
-              href={featuredLink.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`打开原文：${featured.title}`}
-              className="btn-solid shrink-0"
-            >
-              打开原文
-            </a>
-          </div>
-        </section>
-      ) : null}
+            <p className="mt-2 text-[13px] text-muted">
+              {featured.account}
+              <span className="mx-2">·</span>
+              <time dateTime={featured.scanDate}>{featured.publishedLabel}</time>
+              <span className="mx-2">·</span>
+              {featured.query}
+            </p>
+            <p className="mt-3 line-clamp-2 text-sm leading-7 text-muted">
+              {featured.summary}
+            </p>
+            <p className="mt-3">
+              <a
+                href={featuredLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`打开原文：${featured.title}`}
+                className="focus-ring text-sm font-medium text-marrs hover:underline"
+              >
+                查看原文 →
+              </a>
+            </p>
+          </section>
+        ) : null}
 
-      <section
-        id="site-search"
-        className="editorial-container pt-10 pb-6 sm:pt-14"
-        aria-labelledby="home-search-title"
-      >
-        <div className="mb-7 max-w-[65ch]">
-          <h2 id="home-search-title" className="text-2xl font-medium tracking-tight">
-            全站检索
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-muted">
-            按标题、公众号、检索词或摘要搜索归档条目，进入扫描工作台深链阅读。
-          </p>
-        </div>
-        <HomeSearch articles={articles} />
-      </section>
-
-      <section id="scans" className="editorial-container pt-8 pb-20 sm:pt-10 sm:pb-28">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:items-start">
-          <div>
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="text-3xl font-medium tracking-tight">扫描批次</h2>
-              {latestScan ? (
-                <p className="text-sm tabular-nums text-muted">
-                  更新{" "}
-                  <time dateTime={latestScan.date}>
-                    {formatScanDate(latestScan.date)}
-                  </time>
-                </p>
-              ) : null}
-            </div>
-            <div className="mt-8">
-              {scans[0] ? (
-                <ScanCard
-                  scan={scans[0]}
-                  featured
-                  meta={scanSummary(scans[0], articles)}
-                />
-              ) : null}
-              <div className="mt-2 divide-y divide-line">
-                {scans.slice(1).map((scan) => (
+        <section id="scans" className="mt-14">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-start">
+            <div>
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="text-lg font-semibold tracking-tight">扫描批次</h2>
+                {latestScan ? (
+                  <p className="text-[13px] tabular-nums text-muted">
+                    更新{" "}
+                    <time dateTime={latestScan.date}>
+                      {formatScanDate(latestScan.date)}
+                    </time>
+                  </p>
+                ) : null}
+              </div>
+              <div className="mt-4 divide-y divide-line border-y border-line">
+                {scans.map((scan, index) => (
                   <ScanCard
                     key={scan.id}
                     scan={scan}
+                    featured={index === 0}
                     meta={scanSummary(scan, articles)}
                   />
                 ))}
               </div>
             </div>
+            <div className="space-y-8 lg:pt-1">
+              <TopicRail topics={topics.slice(0, 8)} scanId={latestScan?.id} />
+              <aside className="border-t border-line pt-5 text-sm leading-7 text-muted">
+                <h2 className="text-sm font-medium text-ink">引用与 GEO</h2>
+                <p className="mt-2 max-w-[36ch]">
+                  机器可读入口：
+                  <Link
+                    href="/llms.txt"
+                    className="focus-ring text-marrs hover:underline"
+                  >
+                    llms.txt
+                  </Link>
+                  、
+                  <a
+                    href="/feed.xml"
+                    className="focus-ring text-marrs hover:underline"
+                  >
+                    RSS
+                  </a>
+                  、
+                  <a
+                    href="/sitemap.xml"
+                    className="focus-ring text-marrs hover:underline"
+                  >
+                    sitemap
+                  </a>
+                  。
+                </p>
+              </aside>
+            </div>
           </div>
-          <div className="space-y-8 lg:pt-2">
-            <TopicRail topics={topics.slice(0, 8)} scanId={latestScan?.id} />
-            <aside className="border-t border-line pt-5 text-sm leading-7 text-muted">
-              <h2 className="text-sm font-medium text-ink">引用与 GEO</h2>
-              <p className="mt-2 max-w-[36ch]">
-                机器可读入口：
-                <Link href="/llms.txt" className="interactive focus-ring text-marrs hover:underline">
-                  llms.txt
-                </Link>
-                、
-                <a href="/feed.xml" className="interactive focus-ring text-marrs hover:underline">
-                  RSS
-                </a>
-                、
-                <a href="/sitemap.xml" className="interactive focus-ring text-marrs hover:underline">
-                  sitemap
-                </a>
-                。
-              </p>
-            </aside>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section
-        className="editorial-container border-t border-line pt-12 pb-20 sm:pt-14 sm:pb-24"
-        aria-labelledby="home-faq-title"
-      >
-        <h2 id="home-faq-title" className="text-xl font-medium tracking-tight">
-          常见问题
-        </h2>
-        <div className="mt-6 max-w-[65ch] divide-y divide-line">
-          {faq.map((item) => (
-            <details key={item.question} className="group py-5">
-              <summary className="interactive focus-ring cursor-pointer list-none text-base font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
-                {item.question}
-              </summary>
-              <p className="mt-3 max-w-[65ch] text-sm leading-7 text-muted">{item.answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+        <section
+          className="mt-16 border-t border-line pt-10"
+          aria-labelledby="home-faq-title"
+        >
+          <h2
+            id="home-faq-title"
+            className="text-lg font-semibold tracking-tight"
+          >
+            常见问题
+          </h2>
+          <div className="mt-4 max-w-[65ch] divide-y divide-line">
+            {faq.map((item) => (
+              <details key={item.question} className="group py-4">
+                <summary className="focus-ring cursor-pointer list-none text-[15px] font-medium text-ink marker:content-none [&::-webkit-details-marker]:hidden">
+                  {item.question}
+                </summary>
+                <p className="mt-2 text-sm leading-7 text-muted">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
