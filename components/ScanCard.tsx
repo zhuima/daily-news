@@ -16,7 +16,7 @@ export function ScanCard({
       href={`/scans/${scan.id}`}
       className={`interactive focus-ring group grid gap-6 sm:grid-cols-[7.5rem_1fr] ${
         featured
-          ? "mb-2 bg-paper p-8 shadow-[var(--shadow-marrs)] sm:p-10"
+          ? "bg-paper p-8 sm:p-10"
           : "py-7"
       }`}
       style={featured ? { borderRadius: "var(--radius-outer)" } : undefined}

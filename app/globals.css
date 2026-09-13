@@ -186,6 +186,39 @@ p {
   opacity: 0.5;
 }
 
+.btn-line {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  transition:
+    transform var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+
+.btn-line:hover {
+  border-color: color-mix(in srgb, var(--marrs) 42%, var(--line));
+  color: var(--marrs);
+}
+
+.btn-line:active {
+  transform: scale(0.98);
+}
+
+.btn-line:focus-visible {
+  outline: 2px solid var(--marrs);
+  outline-offset: 3px;
+}
+
 .btn-ghost {
   display: inline-flex;
   height: 2.75rem;
