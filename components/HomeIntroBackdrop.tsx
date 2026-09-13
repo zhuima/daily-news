@@ -1,14 +1,42 @@
 "use client";
 
-import Waves from "@/components/Waves";
+import { useEffect, useState, type ComponentType } from "react";
 import { useMotionAllowed } from "@/hooks/use-motion-allowed";
 import { useThemeColor } from "@/hooks/use-theme-color";
+
+type WavesProps = {
+  lineColor?: string;
+  backgroundColor?: string;
+  waveSpeedX?: number;
+  waveSpeedY?: number;
+  waveAmpX?: number;
+  waveAmpY?: number;
+  xGap?: number;
+  yGap?: number;
+  maxCursorMove?: number;
+};
 
 export function HomeIntroBackdrop() {
   const motionOn = useMotionAllowed();
   const lineColor = useThemeColor("--marrs", "#01847E");
+  const [Waves, setWaves] = useState<ComponentType<WavesProps> | null>(null);
 
-  if (!motionOn) return null;
+  useEffect(() => {
+    if (!motionOn) return;
+    let cancelled = false;
+    import("@/components/Waves")
+      .then((mod) => {
+        if (!cancelled) setWaves(() => mod.default);
+      })
+      .catch(() => {
+        /* intro stays a quiet canvas */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [motionOn]);
+
+  if (!motionOn || !Waves) return null;
 
   return (
     <div

@@ -1,7 +1,23 @@
 "use client";
 
-import SplitText from "@/components/SplitText";
+import { useEffect, useState, type ComponentType } from "react";
 import { useMotionAllowed } from "@/hooks/use-motion-allowed";
+
+type HeadlineMotion = ComponentType<{
+  id?: string;
+  text: string;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  ease?: string;
+  splitType?: "chars" | "words" | "lines" | "words, chars";
+  from?: Record<string, number>;
+  to?: Record<string, number>;
+  threshold?: number;
+  rootMargin?: string;
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+  textAlign?: "left" | "center" | "right";
+}>;
 
 export function HomeHeadline({
   id,
@@ -13,8 +29,24 @@ export function HomeHeadline({
   className?: string;
 }) {
   const motionOn = useMotionAllowed();
+  const [SplitText, setSplitText] = useState<HeadlineMotion | null>(null);
 
-  if (!motionOn) {
+  useEffect(() => {
+    if (!motionOn) return;
+    let cancelled = false;
+    import("@/components/SplitText")
+      .then((mod) => {
+        if (!cancelled) setSplitText(() => mod.default);
+      })
+      .catch(() => {
+        /* keep the static H1 */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [motionOn]);
+
+  if (!motionOn || !SplitText) {
     return (
       <h1 id={id} className={className}>
         {text}
