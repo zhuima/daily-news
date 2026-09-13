@@ -1,4 +1,9 @@
 import { isAllowedArticleUrl } from "@/lib/articles";
+import type { ArticleEngagement } from "@/lib/engagement/types";
+import {
+  parseEngagementFromCsvColumns,
+  parseEngagementFromRecord,
+} from "@/lib/engagement/parse-export-fields";
 
 export type WechatExportRow = {
   title: string;
@@ -6,6 +11,7 @@ export type WechatExportRow = {
   url: string;
   publishedLabel?: string;
   summary?: string;
+  engagement?: ArticleEngagement;
 };
 
 function pickString(
@@ -15,6 +21,13 @@ function pickString(
   for (const key of keys) {
     const value = record[key];
     if (typeof value === "string" && value.trim()) return value.trim();
+  }
+  for (const key of Object.keys(record)) {
+    const lower = key.toLowerCase();
+    if (keys.some((k) => lower.includes(k.toLowerCase()))) {
+      const value = record[key];
+      if (typeof value === "string" && value.trim()) return value.trim();
+    }
   }
   return "";
 }
@@ -40,6 +53,7 @@ export function parseWechatExportJson(raw: unknown): WechatExportRow[] {
       "title",
       "article_title",
       "name",
+      "标题",
     ]);
     const account = pickString(record, [
       "account",
@@ -53,6 +67,7 @@ export function parseWechatExportJson(raw: unknown): WechatExportRow[] {
       "link",
       "content_url",
       "article_url",
+      "链接",
     ]);
     if (!title || !url) continue;
     if (!isAllowedArticleUrl(url)) continue;
@@ -68,7 +83,8 @@ export function parseWechatExportJson(raw: unknown): WechatExportRow[] {
         "datetime",
         "time",
       ]),
-      summary: pickString(record, ["summary", "digest", "abstract", "desc"]),
+      summary: pickString(record, ["summary", "digest", "abstract", "desc", "摘要"]),
+      engagement: parseEngagementFromRecord(record),
     });
   }
 
@@ -104,9 +120,10 @@ export function parseWechatExportCsv(text: string): WechatExportRow[] {
   if (lines.length < 2) {
     throw new Error("CSV 至少需要表头与一行数据");
   }
-  const headers = parseCsvLine(lines[0]).map((h) => h.toLowerCase());
+  const headers = parseCsvLine(lines[0]);
+  const headersLower = headers.map((h) => h.toLowerCase());
   const idx = (names: string[]) =>
-    headers.findIndex((h) => names.some((n) => h.includes(n)));
+    headersLower.findIndex((h) => names.some((n) => h.includes(n)));
 
   const titleI = idx(["title", "标题"]);
   const urlI = idx(["url", "link", "链接"]);
@@ -123,7 +140,12 @@ export function parseWechatExportCsv(text: string): WechatExportRow[] {
     const account =
       accountI >= 0 ? (cols[accountI]?.trim() ?? "") : "未知公众号";
     if (!title || !url || !isAllowedArticleUrl(url)) continue;
-    rows.push({ title, account, url });
+    rows.push({
+      title,
+      account,
+      url,
+      engagement: parseEngagementFromCsvColumns(headers, cols),
+    });
   }
 
   if (rows.length === 0) {

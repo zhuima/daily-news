@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArticleEngagement } from "@/components/ArticleEngagement";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { ArticleLinkActions } from "@/components/ArticleLinkActions";
 import { resolveArticleLink } from "@/lib/articles";
@@ -53,6 +54,7 @@ export function ReadingPanel({
       <h2 className="mt-4 text-[1.65rem] leading-snug tracking-tight text-ink">
         {article.title}
       </h2>
+      <ArticleEngagement article={article} className="mt-3" />
       <dl className="mt-4 grid gap-3 rounded-sm border border-line bg-canvas px-4 py-3 text-sm sm:grid-cols-2">
         <div>
           <dt className="text-xs text-marrs">公众号</dt>

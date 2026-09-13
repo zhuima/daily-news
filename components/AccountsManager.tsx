@@ -37,6 +37,7 @@ export function AccountsManager({
   const [message, setMessage] = useState<string | null>(null);
   const [importScanId, setImportScanId] = useState(scanOptions[0]?.id ?? "");
   const [importFile, setImportFile] = useState<File | null>(null);
+  const [tryMpEngagement, setTryMpEngagement] = useState(false);
 
   const previewSlug = useMemo(() => {
     if (customSlug.trim()) return customSlug.trim();
@@ -199,7 +200,7 @@ export function AccountsManager({
           <h2 className="text-lg text-ink">导入文章链接（wechatDownload）</h2>
           <p className="mt-2 text-sm leading-7 text-muted">
             上传 <code className="rounded bg-canvas px-1">export_article_data</code>{" "}
-            导出的 CSV/JSON，仅写入可验证 mp / sogou link，不批量抓正文。说明见{" "}
+            导出的 CSV/JSON（可含阅读/点赞/评论列），仅写入可验证 mp / sogou link，不批量抓正文。说明见{" "}
             <Link href="https://github.com/zhuima/daily-news/blob/main/docs/wechat-download-import.md" className="text-marrs hover:underline">
               docs/wechat-download-import.md
             </Link>
@@ -229,6 +230,17 @@ export function AccountsManager({
                 className="mt-2 block w-full text-sm"
               />
             </label>
+            <label className="flex items-start gap-2 text-sm sm:col-span-2">
+              <input
+                type="checkbox"
+                checked={tryMpEngagement}
+                onChange={(e) => setTryMpEngagement(e.target.checked)}
+                className="mt-1"
+              />
+              <span className="text-muted">
+                导出无互动列时，尝试从 mp 页解析阅读/点赞（常失败，不阻塞导入）
+              </span>
+            </label>
             <div className="sm:col-span-2">
               <button
                 type="button"
@@ -241,6 +253,7 @@ export function AccountsManager({
                     const form = new FormData();
                     form.set("scanId", importScanId);
                     form.set("file", importFile);
+                    if (tryMpEngagement) form.set("tryMpEngagement", "1");
                     const res = await fetch("/api/accounts/import", {
                       method: "POST",
                       headers: adminToken
@@ -254,10 +267,15 @@ export function AccountsManager({
                       matched?: number;
                       inserted?: number;
                       skipped?: number;
+                      engagementFromMp?: number;
                     };
                     if (!res.ok) throw new Error(data.error ?? "导入失败");
                     setMessage(
-                      `导入完成：更新 ${data.matched ?? 0} 条，新增 ${data.inserted ?? 0} 条，跳过 ${data.skipped ?? 0} 条`,
+                      `导入完成：更新 ${data.matched ?? 0} 条，新增 ${data.inserted ?? 0} 条，跳过 ${data.skipped ?? 0} 条${
+                        data.engagementFromMp
+                          ? `；${data.engagementFromMp} 条 mp 页解析到互动`
+                          : ""
+                      }`,
                     );
                     setImportFile(null);
                   } catch (error) {

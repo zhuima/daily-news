@@ -32,6 +32,12 @@ export type ArticleRow = {
   source: string | null;
   score: number | null;
   score_reason: string | null;
+  read_count: number | null;
+  like_count: number | null;
+  old_like_count: number | null;
+  comment_count: number | null;
+  share_count: number | null;
+  engagement_updated_at: string | null;
 };
 
 export function scanRowToScan(row: ScanRow, articleCount: number): Scan {
@@ -65,5 +71,11 @@ export function articleRowToArticle(row: ArticleRow): Article {
     hasDirectLink: row.has_direct_link === 1,
     score: row.score ?? undefined,
     scoreReason: row.score_reason ?? undefined,
+    readCount: row.read_count ?? undefined,
+    likeCount: row.like_count ?? undefined,
+    oldLikeCount: row.old_like_count ?? undefined,
+    commentCount: row.comment_count ?? undefined,
+    shareCount: row.share_count ?? undefined,
+    engagementUpdatedAt: row.engagement_updated_at ?? undefined,
   });
 }

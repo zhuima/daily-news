@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ArticleEngagement } from "@/components/ArticleEngagement";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import type { Article } from "@/lib/types";
 
@@ -56,6 +57,7 @@ export function HomeSearch({ articles }: { articles: Article[] }) {
                       <span className="mx-1.5">·</span>
                       {article.query}
                     </p>
+                    <ArticleEngagement article={article} className="mt-1" />
                     </div>
                     <ArticleScoreChip article={article} className="shrink-0 pt-0.5" />
                   </Link>

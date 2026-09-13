@@ -21,6 +21,13 @@ export type Article = {
   /** 内容质量分 0–100（非流量、非选题权重） */
   score?: number;
   scoreReason?: string;
+  /** 阅读（wechatDownload 导出，非搜索页） */
+  readCount?: number;
+  likeCount?: number;
+  oldLikeCount?: number;
+  commentCount?: number;
+  shareCount?: number;
+  engagementUpdatedAt?: string;
 };
 
 export type Catalog = {

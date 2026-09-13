@@ -1,3 +1,4 @@
+import type { ArticleEngagement } from "@/lib/engagement/types";
 import type { Article, Catalog, Scan } from "@/lib/types";
 import type { TrackScanDb } from "@/lib/db/client";
 import { computeStoredScore } from "@/lib/db/article-score";
@@ -121,6 +122,18 @@ export async function searchArticlesInDb(
   return (rows.results ?? []).map(articleRowToArticle);
 }
 
+function engagementSqlValues(e?: ArticleEngagement) {
+  if (!e) return null;
+  return {
+    read: e.readCount ?? null,
+    like: e.likeCount ?? null,
+    oldLike: e.oldLikeCount ?? null,
+    comment: e.commentCount ?? null,
+    share: e.shareCount ?? null,
+    updatedAt: e.engagementUpdatedAt ?? new Date().toISOString(),
+  };
+}
+
 export async function upsertArticleUrl(
   db: TrackScanDb,
   input: {
@@ -135,6 +148,7 @@ export async function upsertArticleUrl(
     summary?: string;
     query?: string;
     channel?: string;
+    engagement?: ArticleEngagement;
   },
 ): Promise<string> {
   const allowed =
@@ -154,22 +168,50 @@ export async function upsertArticleUrl(
   };
   const { score, scoreReason } = computeStoredScore(scorePayload);
 
+  const eng = engagementSqlValues(input.engagement);
+
   if (input.id) {
-    await db
-      .prepare(
-        `UPDATE articles SET url = ?, has_direct_link = ?, account_slug = COALESCE(?, account_slug),
-         score = ?, score_reason = ?
-         WHERE id = ?`,
-      )
-      .bind(
-        url,
-        hasDirect,
-        input.accountSlug ?? null,
-        score,
-        scoreReason,
-        input.id,
-      )
-      .run();
+    if (eng) {
+      await db
+        .prepare(
+          `UPDATE articles SET url = ?, has_direct_link = ?, account_slug = COALESCE(?, account_slug),
+           score = ?, score_reason = ?,
+           read_count = ?, like_count = ?, old_like_count = ?, comment_count = ?, share_count = ?,
+           engagement_updated_at = ?
+           WHERE id = ?`,
+        )
+        .bind(
+          url,
+          hasDirect,
+          input.accountSlug ?? null,
+          score,
+          scoreReason,
+          eng.read,
+          eng.like,
+          eng.oldLike,
+          eng.comment,
+          eng.share,
+          eng.updatedAt,
+          input.id,
+        )
+        .run();
+    } else {
+      await db
+        .prepare(
+          `UPDATE articles SET url = ?, has_direct_link = ?, account_slug = COALESCE(?, account_slug),
+           score = ?, score_reason = ?
+           WHERE id = ?`,
+        )
+        .bind(
+          url,
+          hasDirect,
+          input.accountSlug ?? null,
+          score,
+          scoreReason,
+          input.id,
+        )
+        .run();
+    }
     return input.id;
   }
 
@@ -178,8 +220,9 @@ export async function upsertArticleUrl(
     .prepare(
       `INSERT INTO articles (
         id, scan_id, scan_date, channel, query, title, account, account_slug,
-        published_label, summary, url, has_direct_link, source, score, score_reason
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wechat-export', ?, ?)`,
+        published_label, summary, url, has_direct_link, source, score, score_reason,
+        read_count, like_count, old_like_count, comment_count, share_count, engagement_updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wechat-export', ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       id,
@@ -196,6 +239,12 @@ export async function upsertArticleUrl(
       hasDirect,
       score,
       scoreReason,
+      eng?.read ?? null,
+      eng?.like ?? null,
+      eng?.oldLike ?? null,
+      eng?.comment ?? null,
+      eng?.share ?? null,
+      eng?.updatedAt ?? null,
     )
     .run();
   return id;
