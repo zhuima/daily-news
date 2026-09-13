@@ -148,10 +148,10 @@ export function AccountsManager({
   return (
     <div className="space-y-10">
       <section
-        className="rounded-sm border border-line bg-canvas p-6"
+        className="surface-inset p-6 sm:p-7"
         aria-labelledby="accounts-admin-title"
       >
-        <h2 id="accounts-admin-title" className="text-lg text-ink">
+        <h2 id="accounts-admin-title" className="text-lg font-medium text-ink">
           在线管理
         </h2>
         <p className="mt-2 text-sm leading-7 text-muted">
@@ -170,7 +170,7 @@ export function AccountsManager({
                 type="password"
                 value={adminToken}
                 onChange={(e) => setAdminToken(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-paper px-3"
+                className="field mt-2"
                 placeholder="ACCOUNTS_ADMIN_TOKEN"
               />
             </label>
@@ -178,7 +178,7 @@ export function AccountsManager({
               type="button"
               disabled={busy || !adminToken}
               onClick={unlockAdmin}
-              className="h-11 rounded-sm bg-marrs px-5 text-sm text-white disabled:opacity-50"
+              className="btn-solid"
             >
               解锁
             </button>
@@ -196,12 +196,12 @@ export function AccountsManager({
 
       {unlocked ? (
         <>
-        <section className="rounded-sm bg-paper p-6 ring-1 ring-line">
-          <h2 className="text-lg text-ink">导入文章链接（wechatDownload）</h2>
+        <section className="surface-raised p-6 sm:p-7">
+          <h2 className="text-lg font-medium text-ink">导入文章链接（wechatDownload）</h2>
           <p className="mt-2 text-sm leading-7 text-muted">
             上传 <code className="rounded bg-canvas px-1">export_article_data</code>{" "}
             导出的 CSV/JSON（可含阅读/点赞/评论列），仅写入可验证 mp / sogou link，不批量抓正文。说明见{" "}
-            <Link href="https://github.com/zhuima/daily-news/blob/main/docs/wechat-download-import.md" className="text-marrs hover:underline">
+            <Link href="https://github.com/zhuima/daily-news/blob/main/docs/wechat-download-import.md" className="interactive focus-ring text-marrs hover:underline">
               docs/wechat-download-import.md
             </Link>
             。
@@ -212,7 +212,7 @@ export function AccountsManager({
               <select
                 value={importScanId}
                 onChange={(e) => setImportScanId(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+                className="field mt-2 bg-canvas"
               >
                 {scanOptions.map((scan) => (
                   <option key={scan.id} value={scan.id}>
@@ -286,7 +286,7 @@ export function AccountsManager({
                     setBusy(false);
                   }
                 }}
-                className="h-11 rounded-sm bg-marrs px-5 text-sm text-white disabled:opacity-50"
+                className="btn-solid"
               >
                 导入链接到 D1
               </button>
@@ -294,8 +294,8 @@ export function AccountsManager({
           </div>
         </section>
 
-        <section className="rounded-sm bg-paper p-6 ring-1 ring-line">
-          <h2 className="text-lg text-ink">添加公众号</h2>
+        <section className="surface-raised p-6 sm:p-7">
+          <h2 className="text-lg font-medium text-ink">添加公众号</h2>
           <form onSubmit={handleAdd} className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="text-sm sm:col-span-2">
               <span className="text-muted">公众号名称 *</span>
@@ -303,7 +303,7 @@ export function AccountsManager({
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+                className="field mt-2 bg-canvas"
               />
             </label>
             <label className="text-sm">
@@ -311,7 +311,7 @@ export function AccountsManager({
               <input
                 value={customSlug}
                 onChange={(e) => setCustomSlug(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+                className="field mt-2 bg-canvas"
                 placeholder={previewSlug || "自动生成"}
               />
             </label>
@@ -321,7 +321,7 @@ export function AccountsManager({
                 type="date"
                 value={addedAt}
                 onChange={(e) => setAddedAt(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+                className="field mt-2 bg-canvas"
               />
             </label>
             <label className="text-sm sm:col-span-2">
@@ -329,7 +329,7 @@ export function AccountsManager({
               <input
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+                className="field mt-2 bg-canvas"
               />
             </label>
             <p className="text-xs text-muted sm:col-span-2">
@@ -339,7 +339,7 @@ export function AccountsManager({
               <button
                 type="submit"
                 disabled={busy}
-                className="h-11 rounded-sm bg-marrs px-5 text-sm text-white disabled:opacity-50"
+                className="btn-solid"
               >
                 添加
               </button>
@@ -351,18 +351,26 @@ export function AccountsManager({
 
       <section aria-labelledby="accounts-list-title">
         <div className="flex items-center justify-between gap-3">
-          <h2 id="accounts-list-title" className="text-xl tracking-tight text-ink">
+          <h2 id="accounts-list-title" className="text-xl font-medium tracking-tight text-ink">
             已追踪（{accounts.length}）
           </h2>
           <button
             type="button"
             onClick={() => refreshList()}
-            className="text-sm text-marrs hover:text-marrs-deep"
+            className="interactive focus-ring text-sm font-medium text-marrs hover:text-marrs-deep"
           >
             刷新
           </button>
         </div>
-        <ul className="mt-6 divide-y divide-line rounded-sm bg-paper ring-1 ring-line">
+        {accounts.length === 0 ? (
+          <div className="surface-inset mt-6 px-6 py-16 text-center">
+            <p className="text-[13px] font-medium text-marrs">还没有追踪公众号</p>
+            <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-7 text-muted">
+              解锁管理后即可添加名称与 slug，导入 wechatDownload 导出的链接。
+            </p>
+          </div>
+        ) : (
+        <ul className="surface-panel mt-6 divide-y divide-line">
           {accounts.map((account) => {
             const stats = articleStats[account.name] ?? { total: 0, linked: 0 };
             return (
@@ -373,7 +381,7 @@ export function AccountsManager({
                 <div className="min-w-0 flex-1">
                   <Link
                     href={`/accounts/${account.slug}`}
-                    className="text-lg text-ink hover:text-marrs"
+                    className="interactive focus-ring text-lg font-medium text-ink hover:text-marrs"
                   >
                     {account.name}
                   </Link>
@@ -382,12 +390,12 @@ export function AccountsManager({
                     <span className="mx-2">·</span>
                     <time dateTime={account.addedAt}>{account.addedAt}</time>
                   </p>
-                  <p className="mt-1 text-sm text-muted">
+                  <p className="mt-1 text-sm tabular-nums text-muted">
                     {stats.total} 篇扫描条目 · {stats.linked} 篇已收录 mp 链接
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link href={`/accounts/${account.slug}`} className="text-sm text-marrs">
+                  <Link href={`/accounts/${account.slug}`} className="interactive focus-ring text-sm font-medium text-marrs">
                     查看 →
                   </Link>
                   {unlocked ? (
@@ -395,7 +403,7 @@ export function AccountsManager({
                       type="button"
                       disabled={busy}
                       onClick={() => handleRemove(account.slug, account.name)}
-                      className="text-sm text-red-700 hover:underline disabled:opacity-50"
+                      className="interactive focus-ring text-sm text-ink/55 hover:text-ink disabled:opacity-50"
                     >
                       移除
                     </button>
@@ -405,6 +413,7 @@ export function AccountsManager({
             );
           })}
         </ul>
+        )}
       </section>
     </div>
   );

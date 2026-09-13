@@ -17,61 +17,65 @@ export function ArticleRow({
 
   return (
     <div
-      className={`border-l-2 transition-colors ${
+      className={`border-l-2 transition-[background-color,border-color] duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
         selected
           ? "border-marrs bg-marrs/[0.06]"
-          : "border-transparent hover:bg-canvas"
+          : "border-transparent hover:bg-canvas/80"
       }`}
     >
       <Link
         href={`/scans/${scanId}?article=${encodeURIComponent(article.id)}`}
         scroll={false}
         aria-current={selected ? "page" : undefined}
-        className="block px-4 py-4 sm:px-5"
+        className="focus-ring block px-4 py-5 sm:px-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tracking-wide text-muted">
-          <span className="text-marrs">{article.channel}</span>
-          <span>·</span>
-          <span>{article.query}</span>
-          {article.hasDirectLink ? (
-            <>
-              <span>·</span>
-              <span>已收录链接</span>
-            </>
-          ) : (
-            <>
-              <span>·</span>
-              <span>链接待补</span>
-            </>
-          )}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] font-medium text-muted">
+            <span className="text-marrs">{article.channel}</span>
+            <span>·</span>
+            <span>{article.query}</span>
+            {article.hasDirectLink ? (
+              <>
+                <span>·</span>
+                <span>已收录链接</span>
+              </>
+            ) : (
+              <>
+                <span>·</span>
+                <span>链接待补</span>
+              </>
+            )}
           </div>
           <ArticleScoreChip article={article} className="shrink-0" />
         </div>
-        <h3 className="mt-1.5 text-[15px] leading-6 text-ink">{article.title}</h3>
+        <h3 className="mt-2 text-[15px] leading-6 font-medium tracking-tight text-pretty text-ink">
+          {article.title}
+        </h3>
         {article.scoreReason ? (
-          <p className="mt-1 text-[10px] text-muted" title={article.scoreReason}>
+          <p className="mt-1 text-[11px] text-muted" title={article.scoreReason}>
             {article.scoreReason}
           </p>
         ) : null}
         <p className="mt-2 text-sm text-ink">
           <span className="text-marrs">{article.account}</span>
           <span className="mx-2 text-muted">·</span>
-          <time dateTime={article.scanDate}>{article.publishedLabel}</time>
+          <time dateTime={article.scanDate} className="tabular-nums">
+            {article.publishedLabel}
+          </time>
         </p>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/70">
           {article.summary}
         </p>
         <ArticleEngagement article={article} className="mt-2" />
       </Link>
-      <div className="px-4 pb-4 sm:px-5">
+      <div className="px-4 pb-5 sm:px-5">
         {outbound ? (
           <a
             href={outbound.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`打开原文：${article.title}`}
-            className="inline-flex text-xs text-marrs hover:text-marrs-deep"
+            className="interactive focus-ring inline-flex text-xs font-medium text-marrs hover:text-marrs-deep"
           >
             {outbound.label} →
           </a>

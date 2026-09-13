@@ -20,34 +20,32 @@ export function SiteFooter() {
 
   return (
     <footer className="mt-auto border-t-4 border-marrs bg-paper">
-      <div className="editorial-container py-10 md:py-14">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-sm">
+      <div className="editorial-container pt-12 pb-14 md:pt-16 md:pb-[4.5rem]">
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-[36ch]">
             <p className="font-serif text-2xl font-semibold tracking-tight text-ink">
               {SITE_NAME}
             </p>
-            <p className="mt-3 text-sm leading-7 text-muted">
+            <p className="mt-4 text-sm leading-7 text-muted">
               微信读书关键词扫描的静态归档。深链阅读、可验证原文、面向人与检索引擎的结构化页面。
             </p>
             <Link
               href="/about"
-              className="mt-4 inline-flex text-sm font-medium text-marrs hover:underline"
+              className="interactive focus-ring mt-5 inline-flex text-sm font-medium text-marrs hover:underline"
             >
               了解数据从哪来 →
             </Link>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 sm:gap-12">
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-16">
             <div>
-              <h2 className="text-xs font-semibold tracking-[0.16em] text-marrs uppercase">
-                浏览
-              </h2>
+              <h2 className="text-[13px] font-medium text-marrs">浏览</h2>
               <ul className="mt-4 space-y-2.5">
                 {browse.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="text-sm text-ink/80 transition-colors hover:text-marrs"
+                      className="interactive focus-ring text-sm text-ink/80 hover:text-marrs"
                     >
                       {item.label}
                     </Link>
@@ -56,15 +54,13 @@ export function SiteFooter() {
               </ul>
             </div>
             <div>
-              <h2 className="text-xs font-semibold tracking-[0.16em] text-marrs uppercase">
-                机器可读
-              </h2>
+              <h2 className="text-[13px] font-medium text-marrs">机器可读</h2>
               <ul className="mt-4 space-y-2.5">
                 {machine.map((item) => (
                   <li key={item.href}>
                     <a
                       href={item.href}
-                      className="text-sm text-ink/80 transition-colors hover:text-marrs"
+                      className="interactive focus-ring text-sm text-ink/80 hover:text-marrs"
                     >
                       {item.label}
                     </a>
@@ -83,7 +79,7 @@ export function SiteFooter() {
           </p>
           <a
             href="https://github.com/zhuima/daily-news"
-            className="text-marrs hover:underline"
+            className="interactive focus-ring text-marrs hover:underline"
             rel="noopener noreferrer"
           >
             GitHub

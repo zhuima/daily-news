@@ -143,7 +143,7 @@ export default async function ScanPage({
             { label: scan.title },
           ]}
         />
-        <p className="mt-3 text-xs text-muted">
+        <p className="mt-3 text-xs tabular-nums text-muted">
           {scan.date} · {articles.length} 篇 · {linkedCount} 条可开原文
         </p>
       </div>

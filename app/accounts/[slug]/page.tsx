@@ -35,7 +35,7 @@ export default async function AccountDetailPage({
   const pageUrl = absoluteUrl(`/accounts/${slug}`);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+    <main className="editorial-container pt-12 pb-16 sm:pt-16 sm:pb-24">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -46,16 +46,16 @@ export default async function AccountDetailPage({
         }}
       />
       <nav aria-label="面包屑" className="text-sm text-muted">
-        <Link href="/accounts" className="hover:text-marrs">
+        <Link href="/accounts" className="interactive focus-ring hover:text-marrs">
           追踪公众号
         </Link>
         <span className="mx-2">/</span>
         <span className="text-ink">{account.name}</span>
       </nav>
 
-      <header className="mt-6 max-w-3xl">
-        <h1 className="text-4xl tracking-tight text-ink">{account.name}</h1>
-        <p className="mt-3 text-sm text-muted">
+      <header className="mt-8 max-w-[65ch]">
+        <h1 className="text-4xl font-medium tracking-tight text-ink">{account.name}</h1>
+        <p className="mt-3 text-sm tabular-nums text-muted">
           {articles.length} 篇扫描条目 · 追踪始于{" "}
           <time dateTime={account.addedAt}>{account.addedAt}</time>
         </p>
@@ -64,22 +64,28 @@ export default async function AccountDetailPage({
         ) : null}
       </header>
 
-      <section className="mt-8 rounded-sm border border-line bg-canvas p-5 text-sm leading-7">
-        <h2 className="text-base text-ink">下载正文（本地操作）</h2>
+      <section className="surface-inset mt-8 p-5 text-sm leading-7">
+        <h2 className="text-base font-medium text-ink">下载正文（本地操作）</h2>
         <p className="mt-2 text-muted">
           x-fetcher 仅支持<strong className="text-ink">单篇 mp URL</strong>
           。对已收录链接运行：
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-sm bg-paper p-4 text-xs ring-1 ring-line">
+        <pre
+          className="mt-3 overflow-x-auto bg-paper p-4 text-xs"
+          style={{
+            borderRadius: "var(--radius-inner)",
+            boxShadow: "inset 0 0 0 1px var(--line)",
+          }}
+        >
 {`node scripts/download-account-bodies.mjs --account "${account.name}"`}
         </pre>
       </section>
 
       <section className="mt-10" aria-labelledby="account-articles-title">
-        <h2 id="account-articles-title" className="text-xl tracking-tight">
+        <h2 id="account-articles-title" className="text-xl font-medium tracking-tight">
           文章列表
         </h2>
-        <ul className="mt-6 divide-y divide-line rounded-sm bg-paper ring-1 ring-line">
+        <ul className="surface-panel mt-6 divide-y divide-line">
           {articles.map((article) => {
             const link = resolveArticleLink(article);
             return (
@@ -89,7 +95,7 @@ export default async function AccountDetailPage({
                     <h3 className="min-w-0 flex-1 text-[15px] leading-6 text-ink">
                       <Link
                         href={`/scans/${article.scanDate}?article=${encodeURIComponent(article.id)}`}
-                        className="hover:text-marrs"
+                        className="interactive focus-ring hover:text-marrs"
                       >
                         {article.title}
                       </Link>
@@ -115,7 +121,7 @@ export default async function AccountDetailPage({
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`打开原文：${article.title}`}
-                        className="text-sm text-marrs hover:text-marrs-deep"
+                        className="interactive focus-ring text-sm font-medium text-marrs hover:text-marrs-deep"
                       >
                         打开原文 →
                       </a>
