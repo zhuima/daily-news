@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
-import { ScanCard } from "@/components/ScanCard";
+import { HomeHeadline } from "@/components/HomeHeadline";
+import { HomeIntroBackdrop } from "@/components/HomeIntroBackdrop";
 import { HomeSearch } from "@/components/HomeSearch";
-import { TopicRail } from "@/components/TopicRail";
 import { JsonLd } from "@/components/JsonLd";
+import { ScanCard } from "@/components/ScanCard";
+import { SoftCardHover } from "@/components/SoftCardHover";
+import { TopicRail } from "@/components/TopicRail";
 import { resolveArticleLink } from "@/lib/articles";
 import { getAllArticles, getCatalog, getScans } from "@/lib/data";
 import { formatScanDate } from "@/lib/format";
@@ -80,35 +83,35 @@ export default async function HomePage() {
       />
 
       <section
-        className="border-b border-line bg-marrs text-white"
+        className="relative overflow-hidden border-b border-line"
         aria-labelledby="home-hero-title"
       >
-        <div className="editorial-container grid gap-12 pt-12 pb-16 sm:pt-16 sm:pb-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+        <HomeIntroBackdrop />
+        <div className="editorial-container relative grid gap-12 pt-12 pb-16 sm:pt-16 sm:pb-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div>
-            <p className="type-kicker text-white/80">
+            <p className="type-kicker text-marrs">
               关键词扫描归档
             </p>
-            <h1
+            <HomeHeadline
               id="home-hero-title"
-              className="type-display mt-5 max-w-2xl text-4xl sm:text-5xl lg:text-[3.5rem]"
-            >
-              赛道扫描
-            </h1>
-            <p className="type-prose mt-6 text-lg leading-8 text-white/88">
+              text="赛道扫描"
+              className="type-display mt-5 max-w-2xl text-4xl text-ink sm:text-5xl lg:text-[3.5rem]"
+            />
+            <p className="type-prose mt-6 text-lg leading-8 text-muted">
               把一次关键词扫描变成可引用的阅读档案：公众号、发布时间、摘要与可验证原文链接，深链分享不断档。
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               {latestScan ? (
-                <Link href={`/scans/${latestScan.id}`} className="btn-on-marrs">
+                <Link href={`/scans/${latestScan.id}`} className="btn-solid">
                   打开最新扫描
                 </Link>
               ) : null}
-              <Link href="/accounts" className="btn-ghost">
+              <Link href="/accounts" className="btn-line">
                 管理公众号
               </Link>
             </div>
           </div>
-          <dl className="grid grid-cols-2 overflow-hidden border border-white/20 bg-white/[0.06]">
+          <dl className="grid grid-cols-2 overflow-hidden border border-line bg-paper">
             {[
               { label: "扫描批次", value: scans.length },
               { label: "文章条目", value: catalog.articles.length },
@@ -117,10 +120,10 @@ export default async function HomePage() {
             ].map((stat, index) => (
               <div
                 key={stat.label}
-                className={`px-5 py-6 ${index % 2 === 0 ? "border-r border-white/20" : ""} ${index < 2 ? "border-b border-white/20" : ""}`}
+                className={`px-5 py-6 ${index % 2 === 0 ? "border-r border-line" : ""} ${index < 2 ? "border-b border-line" : ""}`}
               >
-                <dt className="text-[13px] font-medium text-white/68">{stat.label}</dt>
-                <dd className="mt-2 text-3xl font-medium tabular-nums tracking-tight">
+                <dt className="text-[13px] font-medium text-muted">{stat.label}</dt>
+                <dd className="mt-2 text-3xl font-medium tabular-nums tracking-tight text-ink">
                   {stat.value}
                 </dd>
               </div>
@@ -201,11 +204,13 @@ export default async function HomePage() {
             </div>
             <div className="mt-8">
               {scans[0] ? (
-                <ScanCard
-                  scan={scans[0]}
-                  featured
-                  meta={scanSummary(scans[0], articles)}
-                />
+                <SoftCardHover>
+                  <ScanCard
+                    scan={scans[0]}
+                    featured
+                    meta={scanSummary(scans[0], articles)}
+                  />
+                </SoftCardHover>
               ) : null}
               <div className="mt-2 divide-y divide-line">
                 {scans.slice(1).map((scan) => (
