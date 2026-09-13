@@ -45,7 +45,7 @@ export function ArticleEngagement({
   if (parts.length === 0) return null;
 
   return (
-    <p className={`text-[11px] text-muted ${className}`}>
+    <p className={`text-[11px] tabular-nums text-muted ${className}`}>
       {parts.join(" · ")}
     </p>
   );

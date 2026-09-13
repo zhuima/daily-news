@@ -12,8 +12,11 @@ export function ArticleList({
 }) {
   if (articles.length === 0) {
     return (
-      <div className="px-6 py-16 text-center text-sm leading-7 text-muted">
-        没有符合当前筛选的文章。试试清空关键词或关闭「仅看可打开原文」。
+      <div className="px-6 py-20 text-center">
+        <p className="text-[13px] font-medium text-marrs">没有匹配条目</p>
+        <p className="mx-auto mt-3 max-w-[36ch] text-sm leading-7 text-muted">
+          当前筛选下没有文章。清空关键词，或把检索词改回「全部」。
+        </p>
       </div>
     );
   }

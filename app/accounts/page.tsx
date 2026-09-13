@@ -34,7 +34,7 @@ export default async function AccountsPage() {
   const persistence = await dbConfigured();
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+    <main className="editorial-container pt-12 pb-16 sm:pt-16 sm:pb-24">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -44,14 +44,13 @@ export default async function AccountsPage() {
           numberOfItems: doc.accounts.length,
         }}
       />
-      <header className="max-w-3xl">
-        <p className="text-xs tracking-[0.14em] text-marrs">Accounts</p>
-        <h1 className="mt-2 text-4xl tracking-tight text-ink">追踪公众号</h1>
-        <p className="mt-4 text-[15px] leading-8 text-muted">
+      <header className="max-w-[65ch]">
+        <h1 className="text-4xl font-medium tracking-tight text-ink">追踪公众号</h1>
+        <p className="mt-5 text-[15px] leading-8 text-muted">
           在浏览器内添加或移除追踪列表（Cloudflare D1 持久化）。可导入 wechatDownload 导出的文章链接 CSV/JSON（仅收录链接，不批量抓正文）。正文下载请在本机使用{" "}
           <a
             href="https://github.com/zhuima/x-fetcher"
-            className="text-marrs hover:text-marrs-deep"
+            className="interactive focus-ring text-marrs hover:text-marrs-deep"
             rel="noopener noreferrer"
             target="_blank"
           >

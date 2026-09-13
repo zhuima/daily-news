@@ -33,7 +33,11 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="flex h-11 w-11 items-center justify-center rounded-sm text-ink ring-1 ring-line transition-colors hover:bg-paper hover:text-marrs"
+        className="interactive focus-ring relative z-50 flex h-11 w-11 items-center justify-center text-ink hover:bg-paper hover:text-marrs"
+        style={{
+          borderRadius: "var(--radius-inner)",
+          boxShadow: "inset 0 0 0 1px var(--line)",
+        }}
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={open ? "关闭菜单" : "打开菜单"}
@@ -65,7 +69,7 @@ export function MobileNav() {
       {open ? (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-ink/25 backdrop-blur-[2px]"
+          className="fixed inset-x-0 top-14 bottom-0 z-40 bg-ink/25 backdrop-blur-[2px]"
           aria-label="关闭菜单"
           onClick={() => setOpen(false)}
         />
@@ -76,13 +80,13 @@ export function MobileNav() {
         role="dialog"
         aria-modal="true"
         aria-label="站点导航"
-        className={`fixed inset-x-0 top-[3.5rem] z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-line bg-canvas shadow-lg transition duration-200 ${
+        className={`fixed inset-x-0 top-[3.5rem] z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-line bg-canvas shadow-[var(--shadow-ink)] transition duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
           open
             ? "translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-2 opacity-0"
         }`}
       >
-        <nav className="editorial-container flex flex-col gap-1 py-4">
+        <nav className="editorial-container flex flex-col gap-1 py-5">
           {nav.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -91,11 +95,12 @@ export function MobileNav() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={() => setOpen(false)}
-                className={`rounded-sm px-4 py-3.5 text-base transition-colors ${
+                className={`interactive focus-ring px-4 py-3.5 text-base font-medium ${
                   active
                     ? "bg-marrs text-white"
                     : "text-ink hover:bg-paper hover:text-marrs"
                 }`}
+                style={{ borderRadius: "var(--radius-inner)" }}
               >
                 {item.label}
               </Link>
@@ -104,7 +109,8 @@ export function MobileNav() {
           <Link
             href="/#site-search"
             onClick={() => setOpen(false)}
-            className="mt-2 rounded-sm border border-line bg-paper px-4 py-3.5 text-base text-ink hover:border-marrs/40 hover:text-marrs"
+            className="interactive focus-ring mt-2 border border-line bg-paper px-4 py-3.5 text-base text-ink hover:border-marrs/40 hover:text-marrs"
+            style={{ borderRadius: "var(--radius-inner)" }}
           >
             全站搜索
           </Link>

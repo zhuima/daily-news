@@ -28,7 +28,7 @@ export function OriginalArticleLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`打开原文：${article.title}`}
-      className={`inline-flex items-center gap-1 text-sm font-medium text-marrs hover:text-marrs-deep hover:underline ${className}`}
+      className={`interactive focus-ring inline-flex items-center gap-1 text-sm font-medium text-marrs hover:text-marrs-deep hover:underline ${className}`}
     >
       {labels[variant]}
       <span className="sr-only">（在新标签页打开）</span>

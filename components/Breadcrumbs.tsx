@@ -14,7 +14,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
               {last || !item.href ? (
                 <span className={last ? "text-ink" : undefined}>{item.label}</span>
               ) : (
-                <Link href={item.href} className="hover:text-marrs">
+                <Link href={item.href} className="interactive focus-ring hover:text-marrs">
                   {item.label}
                 </Link>
               )}

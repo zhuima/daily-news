@@ -11,6 +11,16 @@
   --line: #e4e1d8;
   --background: var(--canvas);
   --foreground: var(--ink);
+
+  --radius-inner: 0.3125rem;
+  --radius-outer: 0.875rem;
+  --shadow-ink: 0 22px 44px -28px color-mix(in srgb, var(--ink) 38%, transparent);
+  --shadow-marrs: 0 24px 48px -26px color-mix(in srgb, var(--marrs) 42%, transparent);
+  --shadow-sheet: 0 -16px 40px -18px color-mix(in srgb, var(--ink) 28%, transparent);
+  --duration: 240ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --z-header: 50;
+  --z-overlay: 50;
 }
 
 @theme inline {
@@ -51,15 +61,25 @@ body::before {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  opacity: 0.035;
-  background-image: radial-gradient(var(--ink) 0.6px, transparent 0.6px);
-  background-size: 24px 24px;
+  opacity: 0.028;
+  background-image: radial-gradient(var(--ink) 0.55px, transparent 0.55px);
+  background-size: 22px 22px;
   z-index: -1;
 }
 
 ::selection {
   background: color-mix(in srgb, var(--marrs) 22%, white);
   color: var(--marrs-ink);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 .editorial-container {
@@ -71,5 +91,233 @@ body::before {
 }
 
 .skip-link {
-  @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-sm focus:bg-marrs focus:px-4 focus:py-2 focus:text-white;
+  @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-marrs focus:px-4 focus:py-2 focus:text-white;
+  border-radius: var(--radius-inner);
+}
+
+.type-kicker {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.type-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.type-prose {
+  max-width: 65ch;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.surface-raised {
+  background: var(--paper);
+  border-radius: var(--radius-outer);
+  box-shadow: var(--shadow-ink);
+}
+
+.surface-panel {
+  background: var(--paper);
+  border-radius: var(--radius-outer);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.surface-inset {
+  background: color-mix(in srgb, var(--canvas) 78%, var(--paper));
+  border-radius: var(--radius-outer);
+}
+
+.interactive {
+  transition:
+    transform var(--duration) var(--ease),
+    opacity var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.interactive:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--marrs);
+  outline-offset: 3px;
+}
+
+.btn-solid {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-inner);
+  background: var(--marrs);
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  transition:
+    transform var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    opacity var(--duration) var(--ease);
+}
+
+.btn-solid:hover {
+  background: var(--marrs-deep);
+}
+
+.btn-solid:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-solid:focus-visible {
+  outline: 2px solid var(--marrs);
+  outline-offset: 3px;
+}
+
+.btn-solid:disabled {
+  opacity: 0.5;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-inner);
+  border: 1px solid color-mix(in srgb, white 50%, transparent);
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  transition:
+    transform var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+
+.btn-ghost:hover {
+  background: color-mix(in srgb, white 10%, transparent);
+}
+
+.btn-ghost:active {
+  transform: scale(0.98);
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.btn-on-marrs {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-inner);
+  background: white;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--marrs);
+  transition:
+    transform var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    opacity var(--duration) var(--ease);
+}
+
+.btn-on-marrs:hover {
+  background: color-mix(in srgb, white 90%, var(--canvas));
+}
+
+.btn-on-marrs:active {
+  transform: scale(0.98);
+}
+
+.btn-on-marrs:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.field {
+  height: 2.75rem;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+  background: var(--paper);
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition:
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.field:focus {
+  border-color: var(--marrs);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marrs) 18%, transparent);
+}
+
+.chip {
+  height: 2.25rem;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  transition:
+    transform var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+
+.chip:hover {
+  border-color: color-mix(in srgb, var(--marrs) 40%, var(--line));
+  color: var(--marrs);
+}
+
+.chip:active {
+  transform: scale(0.98);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--marrs);
+  outline-offset: 2px;
+}
+
+.chip-active {
+  border-color: var(--marrs);
+  background: var(--marrs);
+  color: white;
+}
+
+.chip-active:hover {
+  border-color: var(--marrs-deep);
+  background: var(--marrs-deep);
+  color: white;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

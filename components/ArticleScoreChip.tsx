@@ -13,7 +13,8 @@ export function ArticleScoreChip({
   return (
     <span className={`inline-flex flex-col gap-0.5 ${className}`}>
       <span
-        className="inline-flex items-center rounded-sm bg-marrs px-2 py-0.5 text-[11px] font-medium tabular-nums text-white"
+        className="inline-flex items-center bg-marrs px-2 py-0.5 text-[11px] font-medium tabular-nums text-white"
+        style={{ borderRadius: "var(--radius-inner)" }}
         title={article.scoreReason ?? "质量分"}
       >
         质量分 {score}

@@ -22,7 +22,7 @@ export function HomeSearch({ articles }: { articles: Article[] }) {
   }, [articles, query]);
 
   return (
-    <div className="rounded-sm bg-paper p-6 ring-1 ring-line sm:p-8">
+    <div className="surface-inset px-6 py-7 sm:px-8 sm:py-8">
       <label className="block">
         <span className="text-sm font-medium text-ink">全站搜索</span>
         <span className="mt-1 block text-sm text-muted">
@@ -33,31 +33,35 @@ export function HomeSearch({ articles }: { articles: Article[] }) {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="例如：vLLM、水金聊投资、算力成本"
-          className="mt-4 h-12 w-full rounded-sm border border-line bg-canvas px-4 text-sm outline-none transition focus:border-marrs focus:ring-2 focus:ring-marrs/20"
+          className="field mt-4 h-12 bg-paper"
         />
       </label>
       {query.trim() ? (
-        <div className="mt-5 border-t border-line pt-5">
+        <div className="mt-6 border-t border-line pt-5">
           {results.length === 0 ? (
-            <p className="text-sm text-muted">没有匹配的文章。</p>
+            <p className="text-sm leading-7 text-muted">
+              没有匹配的文章。换一个公众号名、检索词或标题片段再试。
+            </p>
           ) : (
             <ul className="divide-y divide-line">
               {results.map((article) => (
                 <li key={article.id}>
                   <Link
                     href={`/scans/${article.scanDate}?article=${encodeURIComponent(article.id)}`}
-                    className="flex items-start justify-between gap-3 py-3 transition-colors hover:text-marrs"
+                    className="interactive focus-ring flex items-start justify-between gap-3 py-3.5 hover:text-marrs"
                   >
                     <div className="min-w-0 flex-1">
-                    <p className="text-[15px] leading-6 text-ink">{article.title}</p>
-                    <p className="mt-1 text-xs text-muted">
-                      {article.account}
-                      <span className="mx-1.5">·</span>
-                      {article.publishedLabel}
-                      <span className="mx-1.5">·</span>
-                      {article.query}
-                    </p>
-                    <ArticleEngagement article={article} className="mt-1" />
+                      <p className="text-[15px] leading-6 font-medium text-ink">
+                        {article.title}
+                      </p>
+                      <p className="mt-1 text-xs text-muted">
+                        {article.account}
+                        <span className="mx-1.5">·</span>
+                        {article.publishedLabel}
+                        <span className="mx-1.5">·</span>
+                        {article.query}
+                      </p>
+                      <ArticleEngagement article={article} className="mt-1" />
                     </div>
                     <ArticleScoreChip article={article} className="shrink-0 pt-0.5" />
                   </Link>

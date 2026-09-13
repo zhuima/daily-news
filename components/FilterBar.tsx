@@ -11,7 +11,7 @@ export function FilterBar({ queries }: { queries: string[] }) {
   const setSort = useFilters((s) => s.setSort);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <label className="block">
         <span className="text-sm font-medium text-ink">关键词搜索</span>
         <span className="mt-1 block text-sm text-muted">
@@ -22,11 +22,11 @@ export function FilterBar({ queries }: { queries: string[] }) {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="输入关键词，例如 Serving、MFU、评测"
-          className="mt-3 h-11 w-full rounded-sm border border-line bg-paper px-4 text-sm outline-none ring-marrs/0 transition focus:border-marrs focus:ring-2 focus:ring-marrs/20"
+          className="field mt-3"
         />
       </label>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="mr-1 text-xs text-muted">检索词</span>
+        <span className="mr-1 text-[13px] font-medium text-muted">检索词</span>
         <QueryChip
           active={query === ""}
           onClick={() => setQuery("")}
@@ -41,8 +41,8 @@ export function FilterBar({ queries }: { queries: string[] }) {
           />
         ))}
       </div>
-      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-4">
-        <span className="mr-1 text-xs text-muted">排序</span>
+      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-5">
+        <span className="mr-1 text-[13px] font-medium text-muted">排序</span>
         <QueryChip
           active={sort === "default"}
           onClick={() => setSort("default")}
@@ -71,11 +71,7 @@ function QueryChip({
     <button
       type="button"
       onClick={onClick}
-      className={`h-9 rounded-sm border px-3 text-xs tracking-wide transition-colors ${
-        active
-          ? "border-marrs bg-marrs text-white"
-          : "border-line bg-paper text-muted hover:border-marrs/40 hover:text-marrs"
-      }`}
+      className={`chip ${active ? "chip-active" : ""}`}
       aria-pressed={active}
     >
       {label}
