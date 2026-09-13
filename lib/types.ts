@@ -18,6 +18,9 @@ export type Article = {
   summary: string;
   url: string;
   hasDirectLink: boolean;
+  /** 内容质量分 0–100（非流量、非选题权重） */
+  score?: number;
+  scoreReason?: string;
 };
 
 export type Catalog = {

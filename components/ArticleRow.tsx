@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { resolveArticleLink } from "@/lib/articles";
 import type { Article } from "@/lib/types";
 
@@ -27,7 +28,8 @@ export function ArticleRow({
         aria-current={selected ? "page" : undefined}
         className="block px-4 py-4 sm:px-5"
       >
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tracking-wide text-muted">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tracking-wide text-muted">
           <span className="text-marrs">{article.channel}</span>
           <span>·</span>
           <span>{article.query}</span>
@@ -42,8 +44,15 @@ export function ArticleRow({
               <span>链接待补</span>
             </>
           )}
+          </div>
+          <ArticleScoreChip article={article} className="shrink-0" />
         </div>
         <h3 className="mt-1.5 text-[15px] leading-6 text-ink">{article.title}</h3>
+        {article.scoreReason ? (
+          <p className="mt-1 text-[10px] text-muted" title={article.scoreReason}>
+            {article.scoreReason}
+          </p>
+        ) : null}
         <p className="mt-2 text-sm text-ink">
           <span className="text-marrs">{article.account}</span>
           <span className="mx-2 text-muted">·</span>

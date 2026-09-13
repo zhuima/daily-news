@@ -40,6 +40,7 @@ yarn-error.log*
 .open-next/
 .wrangler/
 scripts/seed-generated.sql
+scripts/rescore-generated.sql
 
 # typescript
 *.tsbuildinfo

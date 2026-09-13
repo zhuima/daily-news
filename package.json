@@ -14,7 +14,11 @@
     "db:migrate:remote": "wrangler d1 migrations apply track-scan-db --remote",
     "db:seed:local": "node scripts/seed-d1.mjs --local",
     "db:seed:remote": "node scripts/seed-d1.mjs --remote",
-    "db:seed:sql": "node scripts/seed-d1.mjs --write"
+    "db:seed:sql": "node scripts/seed-d1.mjs --write",
+    "db:rescore": "tsx scripts/rescore-d1.ts --local",
+    "db:rescore:local": "tsx scripts/rescore-d1.ts --local",
+    "db:rescore:remote": "tsx scripts/rescore-d1.ts --remote",
+    "db:rescore:json": "tsx scripts/rescore-d1.ts --json-only"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.6.5",
@@ -32,6 +36,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
+    "tsx": "^4.20.5",
     "typescript": "^5",
     "wrangler": "^4.36.0"
   }

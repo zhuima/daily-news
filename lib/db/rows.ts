@@ -30,6 +30,8 @@ export type ArticleRow = {
   url: string;
   has_direct_link: number;
   source: string | null;
+  score: number | null;
+  score_reason: string | null;
 };
 
 export function scanRowToScan(row: ScanRow, articleCount: number): Scan {
@@ -61,5 +63,7 @@ export function articleRowToArticle(row: ArticleRow): Article {
     summary: row.summary,
     url: row.url,
     hasDirectLink: row.has_direct_link === 1,
+    score: row.score ?? undefined,
+    scoreReason: row.score_reason ?? undefined,
   });
 }

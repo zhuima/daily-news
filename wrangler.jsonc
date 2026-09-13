@@ -18,10 +18,10 @@
     {
       "binding": "DB",
       "database_name": "track-scan-db",
-      "database_id": "REPLACE_WITH_WRANGLER_D1_CREATE_OUTPUT"
+      "database_id": "a19cb813-a54f-4508-b183-6fcf267e082a"
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://daily-news.example.com"
+    "NEXT_PUBLIC_SITE_URL": "https://news.affdirs.com"
   }
 }

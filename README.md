@@ -65,7 +65,7 @@ npm run db:seed:remote
 
 # 4. Pages 项目 Secrets（Dashboard → Workers & Pages → 项目 → Settings → Variables）
 #    ACCOUNTS_ADMIN_TOKEN = 管理口令
-#    NEXT_PUBLIC_SITE_URL = https://你的域名
+#    NEXT_PUBLIC_SITE_URL = https://news.affdirs.com
 
 # 5. 构建并部署
 npm run build:cf
@@ -98,6 +98,7 @@ node scripts/download-account-bodies.mjs --account "水金聊投资"
 | `npm run deploy:cf` | 部署到 Cloudflare Pages |
 | `npm run db:migrate:local` / `:remote` | D1 migrations |
 | `npm run db:seed:local` / `:remote` | 从 `data/*.json` 写入 D1 |
+| `npm run db:rescore` / `db:rescore:remote` | 重算全库「质量分」（见 docs/article-scoring.md） |
 | `node scripts/seed-catalog.mjs` | 仅 regenerates `data/index.json` 样例（Git 种子，非运行时 SoT） |
 
 ## 路由

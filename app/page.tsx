@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { ScanCard } from "@/components/ScanCard";
 import { HomeSearch } from "@/components/HomeSearch";
 import { TopicRail } from "@/components/TopicRail";
@@ -136,7 +137,10 @@ export default async function HomePage() {
         <section className="editorial-container py-10 sm:py-12" aria-labelledby="featured-title">
           <div className="grid gap-6 border border-marrs/20 bg-paper p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
             <div>
-              <p className="text-xs tracking-[0.14em] text-marrs">已收录直链 · 推荐阅读</p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs tracking-[0.14em] text-marrs">已收录直链 · 推荐阅读</p>
+                <ArticleScoreChip article={featured} />
+              </div>
               <h2 id="featured-title" className="mt-2 text-2xl leading-snug tracking-tight">
                 <Link
                   href={`/scans/${featured.scanDate}?article=${encodeURIComponent(featured.id)}`}

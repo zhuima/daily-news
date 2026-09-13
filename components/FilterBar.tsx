@@ -7,6 +7,8 @@ export function FilterBar({ queries }: { queries: string[] }) {
   const search = useFilters((s) => s.search);
   const setQuery = useFilters((s) => s.setQuery);
   const setSearch = useFilters((s) => s.setSearch);
+  const sort = useFilters((s) => s.sort);
+  const setSort = useFilters((s) => s.setSort);
 
   return (
     <div className="space-y-4">
@@ -38,6 +40,19 @@ export function FilterBar({ queries }: { queries: string[] }) {
             label={item}
           />
         ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-4">
+        <span className="mr-1 text-xs text-muted">排序</span>
+        <QueryChip
+          active={sort === "default"}
+          onClick={() => setSort("default")}
+          label="目录顺序"
+        />
+        <QueryChip
+          active={sort === "score-desc"}
+          onClick={() => setSort("score-desc")}
+          label="质量分 ↓"
+        />
       </div>
     </div>
   );
