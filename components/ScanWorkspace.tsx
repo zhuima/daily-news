@@ -111,6 +111,7 @@ export function ScanWorkspace({
             scroll={false}
             className="fixed inset-0 z-50 bg-ink/35"
             aria-label="关闭阅读面板"
+            data-sheet-backdrop="true"
           />
           <div className="fixed inset-x-0 bottom-0 z-50 max-h-[86vh] overflow-y-auto rounded-t-xl border-t border-line bg-paper">
             <div className="flex justify-center pt-3" aria-hidden>

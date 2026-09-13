@@ -151,6 +151,29 @@ p {
   opacity: 0.5;
 }
 
+.btn-sheet-close {
+  display: inline-flex;
+  height: 3.5rem;
+  min-width: 5.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--marrs);
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.btn-sheet-close:hover {
+  background: var(--marrs-deep);
+}
+
+.btn-sheet-close:focus-visible {
+  outline: 2px solid var(--marrs);
+  outline-offset: 2px;
+}
+
 .btn-ghost,
 .btn-on-marrs {
   display: inline-flex;
@@ -158,7 +181,7 @@ p {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, var(--line));
   background: var(--paper);
   padding: 0 0.9rem;
   font-size: 0.8125rem;
@@ -185,7 +208,7 @@ p {
 .field {
   height: 2.25rem;
   width: 100%;
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, var(--line));
   border-radius: var(--radius);
   background: var(--paper);
   padding: 0 0.75rem;
@@ -204,7 +227,7 @@ p {
 .chip {
   height: 1.875rem;
   border-radius: var(--radius);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, var(--line));
   background: var(--paper);
   padding: 0 0.65rem;
   font-size: 0.75rem;

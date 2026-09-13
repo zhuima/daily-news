@@ -55,7 +55,7 @@ export function ReadingPanel({
           <Link
             href={closeHref}
             scroll={false}
-            className="btn-solid h-12 min-w-12 px-5 text-[15px]"
+            className="btn-sheet-close"
             aria-label="关闭阅读面板"
           >
             关闭
