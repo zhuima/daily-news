@@ -29,16 +29,18 @@ function readQueryParam(q: string | string[] | undefined): string {
   return q ?? "";
 }
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
   searchParams,
 }: PageProps<"/scans/[scanId]">): Promise<Metadata> {
   const { scanId } = await params;
-  const scan = getScan(scanId);
+  const scan = await getScan(scanId);
   if (!scan) return { title: "未找到扫描" };
 
   const { article } = await searchParams;
-  const selected = getArticle(readArticleId(article));
+  const selected = await getArticle(readArticleId(article));
   const path = selected
     ? `/scans/${scanId}?article=${encodeURIComponent(selected.id)}`
     : `/scans/${scanId}`;
@@ -58,14 +60,14 @@ export default async function ScanPage({
   searchParams,
 }: PageProps<"/scans/[scanId]">) {
   const { scanId } = await params;
-  const scan = getScan(scanId);
+  const scan = await getScan(scanId);
   if (!scan) notFound();
 
   const { article, q } = await searchParams;
   const selectedId = readArticleId(article);
   const initialQuery = readQueryParam(q);
-  const articles = getArticlesByScan(scanId);
-  const selectedArticle = getArticle(selectedId);
+  const articles = await getArticlesByScan(scanId);
+  const selectedArticle = await getArticle(selectedId);
   const siteUrl = getSiteUrl();
   const scanUrl = absoluteUrl(`/scans/${scanId}`);
   const linkedCount = articles.filter((a) => isAllowedArticleUrl(a.url)).length;
@@ -148,7 +150,7 @@ export default async function ScanPage({
       <ScanWorkspace
         scan={scan}
         articles={articles}
-        queries={getQueriesForScan(scanId)}
+        queries={await getQueriesForScan(scanId)}
         selectedId={selectedId}
         selectedArticle={selectedArticle}
         initialQuery={initialQuery}

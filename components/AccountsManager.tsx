@@ -9,16 +9,20 @@ type ArticleStats = Record<
   { total: number; linked: number }
 >;
 
+type ScanOption = { id: string; title: string };
+
 export function AccountsManager({
   initialAccounts,
   articleStats,
   persistence,
   adminConfigured,
+  scanOptions,
 }: {
   initialAccounts: TrackedAccount[];
   articleStats: ArticleStats;
   persistence: boolean;
   adminConfigured: boolean;
+  scanOptions: ScanOption[];
 }) {
   const [accounts, setAccounts] = useState(initialAccounts);
   const [adminToken, setAdminToken] = useState("");
@@ -31,6 +35,8 @@ export function AccountsManager({
   const [notes, setNotes] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [importScanId, setImportScanId] = useState(scanOptions[0]?.id ?? "");
+  const [importFile, setImportFile] = useState<File | null>(null);
 
   const previewSlug = useMemo(() => {
     if (customSlug.trim()) return customSlug.trim();
@@ -148,7 +154,10 @@ export function AccountsManager({
           在线管理
         </h2>
         <p className="mt-2 text-sm leading-7 text-muted">
-          数据保存在 Vercel KV（Upstash Redis）。{persistence ? "已检测到 KV 环境。" : "当前未配置 KV：本地可读种子列表，线上写入需在 Vercel 配置 KV_REST_API_URL / KV_REST_API_TOKEN。"}
+          数据保存在 Cloudflare D1。
+          {persistence
+            ? " 当前运行环境已绑定 D1，可进行增删与链接导入。"
+            : " 当前未绑定 D1（本地 next dev 仅读 JSON 种子）；请用 wrangler pages dev 或 Cloudflare Pages 部署。"}
           {adminConfigured ? "" : " 另需配置 ACCOUNTS_ADMIN_TOKEN。"}
         </p>
 
@@ -185,6 +194,88 @@ export function AccountsManager({
       </section>
 
       {unlocked ? (
+        <>
+        <section className="rounded-sm bg-paper p-6 ring-1 ring-line">
+          <h2 className="text-lg text-ink">导入文章链接（wechatDownload）</h2>
+          <p className="mt-2 text-sm leading-7 text-muted">
+            上传 <code className="rounded bg-canvas px-1">export_article_data</code>{" "}
+            导出的 CSV/JSON，仅写入可验证 mp / sogou link，不批量抓正文。说明见{" "}
+            <Link href="https://github.com/zhuima/daily-news/blob/main/docs/wechat-download-import.md" className="text-marrs hover:underline">
+              docs/wechat-download-import.md
+            </Link>
+            。
+          </p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <label className="text-sm sm:col-span-2">
+              <span className="text-muted">扫描批次</span>
+              <select
+                value={importScanId}
+                onChange={(e) => setImportScanId(e.target.value)}
+                className="mt-2 h-11 w-full rounded-sm border border-line bg-canvas px-3"
+              >
+                {scanOptions.map((scan) => (
+                  <option key={scan.id} value={scan.id}>
+                    {scan.id} · {scan.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-sm sm:col-span-2">
+              <span className="text-muted">CSV / JSON 文件</span>
+              <input
+                type="file"
+                accept=".csv,.json,application/json,text/csv"
+                onChange={(e) => setImportFile(e.target.files?.[0] ?? null)}
+                className="mt-2 block w-full text-sm"
+              />
+            </label>
+            <div className="sm:col-span-2">
+              <button
+                type="button"
+                disabled={busy || !importFile || !importScanId || !persistence}
+                onClick={async () => {
+                  if (!importFile) return;
+                  setBusy(true);
+                  setMessage(null);
+                  try {
+                    const form = new FormData();
+                    form.set("scanId", importScanId);
+                    form.set("file", importFile);
+                    const res = await fetch("/api/accounts/import", {
+                      method: "POST",
+                      headers: adminToken
+                        ? { Authorization: `Bearer ${adminToken}` }
+                        : {},
+                      body: form,
+                    });
+                    const data = (await res.json()) as {
+                      error?: string;
+                      imported?: number;
+                      matched?: number;
+                      inserted?: number;
+                      skipped?: number;
+                    };
+                    if (!res.ok) throw new Error(data.error ?? "导入失败");
+                    setMessage(
+                      `导入完成：更新 ${data.matched ?? 0} 条，新增 ${data.inserted ?? 0} 条，跳过 ${data.skipped ?? 0} 条`,
+                    );
+                    setImportFile(null);
+                  } catch (error) {
+                    setMessage(
+                      error instanceof Error ? error.message : "导入失败",
+                    );
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+                className="h-11 rounded-sm bg-marrs px-5 text-sm text-white disabled:opacity-50"
+              >
+                导入链接到 D1
+              </button>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-sm bg-paper p-6 ring-1 ring-line">
           <h2 className="text-lg text-ink">添加公众号</h2>
           <form onSubmit={handleAdd} className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -237,6 +328,7 @@ export function AccountsManager({
             </div>
           </form>
         </section>
+        </>
       ) : null}
 
       <section aria-labelledby="accounts-list-title">

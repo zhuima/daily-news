@@ -1,0 +1,65 @@
+import type { Article, Scan } from "@/lib/types";
+import { normalizeArticle } from "@/lib/articles";
+
+export type AccountRow = {
+  slug: string;
+  name: string;
+  added_at: string;
+  notes: string;
+};
+
+export type ScanRow = {
+  id: string;
+  scan_date: string;
+  title: string;
+  sources_json: string;
+  notes: string | null;
+};
+
+export type ArticleRow = {
+  id: string;
+  scan_id: string;
+  scan_date: string;
+  channel: string;
+  query: string;
+  title: string;
+  account: string;
+  account_slug: string | null;
+  published_label: string;
+  summary: string;
+  url: string;
+  has_direct_link: number;
+  source: string | null;
+};
+
+export function scanRowToScan(row: ScanRow, articleCount: number): Scan {
+  let sources: string[] = [];
+  try {
+    sources = JSON.parse(row.sources_json) as string[];
+  } catch {
+    sources = [];
+  }
+  return {
+    id: row.id,
+    date: row.scan_date,
+    title: row.title,
+    sources,
+    articleCount,
+    notes: row.notes ?? undefined,
+  };
+}
+
+export function articleRowToArticle(row: ArticleRow): Article {
+  return normalizeArticle({
+    id: row.id,
+    scanDate: row.scan_date,
+    channel: row.channel,
+    query: row.query,
+    title: row.title,
+    account: row.account,
+    publishedLabel: row.published_label,
+    summary: row.summary,
+    url: row.url,
+    hasDirectLink: row.has_direct_link === 1,
+  });
+}

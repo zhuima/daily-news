@@ -1,10 +1,12 @@
 import { listTrackedAccounts } from "@/lib/accounts-api";
+
+export const dynamic = "force-dynamic";
 import { getScans } from "@/lib/data";
 import { SITE_DESCRIPTION, SITE_NAME, getSiteUrl } from "@/lib/site";
 
 export async function GET() {
   const base = getSiteUrl();
-  const scans = getScans();
+  const scans = await getScans();
   const accounts = await listTrackedAccounts();
 
   const body = `# ${SITE_NAME}
@@ -36,8 +38,9 @@ When referencing an article, include: scan date, article title, WeChat account n
 ## Article body fetching (operator)
 Single mp URL only: https://github.com/zhuima/x-fetcher (fetch_wechat.py). Not full WeChat account history.
 
-## Accounts persistence
-Tracked accounts list is stored in Vercel KV at runtime; seed from data/accounts.json when empty.
+## Data store
+Primary: Cloudflare D1 (accounts + scans + articles). Repo JSON under data/ is migration seed only.
+Import article links: POST /api/accounts/import (wechatDownload export CSV/JSON). See docs/wechat-download-import.md
 `;
 
   return new Response(body, {

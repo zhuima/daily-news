@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+
+export const dynamic = "force-dynamic";
 import { listTrackedAccounts } from "@/lib/accounts-api";
 import { getAllArticles, getScans } from "@/lib/data";
 import { absoluteUrl } from "@/lib/site";
@@ -32,14 +34,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  for (const scan of getScans()) {
+  for (const scan of await getScans()) {
     entries.push({
       url: absoluteUrl(`/scans/${scan.id}`),
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     });
-    for (const article of getAllArticles().filter(
+    for (const article of (await getAllArticles()).filter(
       (item) => item.scanDate === scan.date,
     )) {
       entries.push({

@@ -3,7 +3,7 @@ import { AccountsManager } from "@/components/AccountsManager";
 import { JsonLd } from "@/components/JsonLd";
 import { isAllowedArticleUrl } from "@/lib/articles";
 import { readAccountsDocument } from "@/lib/accounts-store";
-import { getAllArticles } from "@/lib/data";
+import { getAllArticles, getScans } from "@/lib/data";
 import { buildPageMetadata } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 import { adminTokenConfigured } from "@/lib/accounts-auth";
@@ -19,7 +19,8 @@ export const dynamic = "force-dynamic";
 
 export default async function AccountsPage() {
   const doc = await readAccountsDocument();
-  const articles = getAllArticles();
+  const articles = await getAllArticles();
+  const scans = await getScans();
   const articleStats: Record<string, { total: number; linked: number }> = {};
 
   for (const article of articles) {
@@ -29,9 +30,8 @@ export default async function AccountsPage() {
     articleStats[article.account] = bucket;
   }
 
-  const persistence = Boolean(
-    process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN,
-  );
+  const { dbConfigured } = await import("@/lib/db/client");
+  const persistence = await dbConfigured();
 
   return (
     <main className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
@@ -48,7 +48,7 @@ export default async function AccountsPage() {
         <p className="text-xs tracking-[0.14em] text-marrs">Accounts</p>
         <h1 className="mt-2 text-4xl tracking-tight text-ink">追踪公众号</h1>
         <p className="mt-4 text-[15px] leading-8 text-muted">
-          在浏览器内添加或移除追踪列表（Vercel KV 持久化）。点击账号查看扫描目录中的文章；正文下载请在本机使用{" "}
+          在浏览器内添加或移除追踪列表（Cloudflare D1 持久化）。可导入 wechatDownload 导出的文章链接 CSV/JSON（仅收录链接，不批量抓正文）。正文下载请在本机使用{" "}
           <a
             href="https://github.com/zhuima/x-fetcher"
             className="text-marrs hover:text-marrs-deep"
@@ -67,6 +67,7 @@ export default async function AccountsPage() {
           articleStats={articleStats}
           persistence={persistence}
           adminConfigured={adminTokenConfigured()}
+          scanOptions={scans.map((s) => ({ id: s.id, title: s.title }))}
         />
       </div>
     </main>

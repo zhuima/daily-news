@@ -1,10 +1,12 @@
 import { getAllArticles, getScans } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 import { isAllowedArticleUrl } from "@/lib/articles";
 import { absoluteUrl, SITE_NAME } from "@/lib/site";
 
 export async function GET() {
-  const scans = getScans();
-  const articles = getAllArticles()
+  const scans = await getScans();
+  const articles = (await getAllArticles())
     .filter((article) => isAllowedArticleUrl(article.url))
     .slice(0, 50);
 
