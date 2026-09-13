@@ -60,6 +60,12 @@ export function normalizeArticle(article: Article): Article {
     ...base,
     score: article.score ?? computed.score,
     scoreReason: article.scoreReason ?? computed.scoreReason,
+    readCount: article.readCount,
+    likeCount: article.likeCount,
+    oldLikeCount: article.oldLikeCount,
+    commentCount: article.commentCount,
+    shareCount: article.shareCount,
+    engagementUpdatedAt: article.engagementUpdatedAt,
   };
 }
 

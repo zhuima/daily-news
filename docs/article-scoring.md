@@ -22,3 +22,5 @@ npm run db:rescore:json     # 仅更新 data/index.json 种子
 ```
 
 导入链接或写入文章时会自动按同一规则计分。
+
+**互动数据**（阅读/点赞/评论等）来自 wechatDownload 导出，仅 UI 展示，**不参与**质量分。

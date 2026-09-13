@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
+import { ArticleEngagement } from "@/components/ArticleEngagement";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { resolveArticleLink } from "@/lib/articles";
 import { getArticlesByAccountSlug, getTrackedAccount } from "@/lib/data";
@@ -106,6 +107,7 @@ export default async function AccountDetailPage({
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/75">
                     {article.summary}
                   </p>
+                  <ArticleEngagement article={article} className="mt-2" />
                   <p className="mt-3">
                     {link ? (
                       <a

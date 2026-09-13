@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArticleEngagement } from "@/components/ArticleEngagement";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { resolveArticleLink } from "@/lib/articles";
 import type { Article } from "@/lib/types";
@@ -61,6 +62,7 @@ export function ArticleRow({
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-ink/70">
           {article.summary}
         </p>
+        <ArticleEngagement article={article} className="mt-2" />
       </Link>
       <div className="px-4 pb-4 sm:px-5">
         {outbound ? (

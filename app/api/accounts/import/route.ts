@@ -24,12 +24,16 @@ export async function POST(request: NextRequest) {
   const contentType = request.headers.get("content-type") ?? "";
   let scanId =
     request.nextUrl.searchParams.get("scanId")?.trim() ?? "";
+  let tryMpEngagement =
+    request.nextUrl.searchParams.get("tryMpEngagement") === "1";
   let rows;
 
   try {
     if (contentType.includes("multipart/form-data")) {
       const form = await request.formData();
       scanId = (form.get("scanId") as string)?.trim() || scanId;
+      tryMpEngagement =
+        tryMpEngagement || form.get("tryMpEngagement") === "1";
       const file = form.get("file");
       if (!file || typeof file === "string") {
         return NextResponse.json({ error: "缺少 file 字段" }, { status: 400 });
@@ -47,8 +51,10 @@ export async function POST(request: NextRequest) {
         format?: "json" | "csv";
         payload?: unknown;
         text?: string;
+        tryMpEngagement?: boolean;
       };
       scanId = body.scanId?.trim() || scanId;
+      tryMpEngagement = tryMpEngagement || Boolean(body.tryMpEngagement);
       if (body.format === "csv" && typeof body.text === "string") {
         rows = parseWechatExportCsv(body.text);
       } else if (body.payload !== undefined) {
@@ -67,7 +73,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const result = await importArticleLinks(db, scanId, rows);
+    const result = await importArticleLinks(db, scanId, rows, {
+      tryMpEngagement,
+    });
     return NextResponse.json({
       ok: true,
       ...result,
