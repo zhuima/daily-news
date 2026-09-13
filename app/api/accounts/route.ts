@@ -6,6 +6,7 @@ import {
   removeTrackedAccount,
 } from "@/lib/accounts-api";
 import { readAccountsDocument } from "@/lib/accounts-store";
+import { dbConfigured } from "@/lib/db/client";
 import {
   adminTokenConfigured,
   verifyAdminRequest,
@@ -13,12 +14,12 @@ import {
 
 export async function GET() {
   const doc = await readAccountsDocument();
+  const d1Bound = await dbConfigured();
   return NextResponse.json({
     accounts: doc.accounts,
     updatedAt: doc.updatedAt,
-    persistence: Boolean(
-      process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN,
-    ),
+    persistence: d1Bound,
+    d1Bound,
     adminConfigured: adminTokenConfigured(),
   });
 }

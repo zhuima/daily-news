@@ -1,131 +1,109 @@
 # daily-news
 
-赛道扫描（Track Scan）：把一次关键词扫描做成可浏览的静态站点。当前仓库在 `main` 上从这份说明起步，站点跑在仓库根目录。
+赛道扫描（Track Scan）：微信读书关键词扫描的静态归档站。**主数据存储：Cloudflare D1**；**主部署：Cloudflare Pages（OpenNext）**。Vercel 仍可用 `npm run build`（无 D1 时回退读仓库内 JSON 种子）。
 
-品牌色 Marrs Green `#01847E`，画布 `#f6f5f2`，阅读区用白纸卡片。界面为中文。文章选择走 URL `?article=<id>`。Zustand 只存检索词 chip 与关键词搜索。
+品牌色 Marrs Green `#01847E`，画布 `#f6f5f2`。文章选择走 URL `?article=<id>`。Zustand 只存检索词与搜索。
 
-**链接策略：**「打开原文」仅指向已验证的 `mp.weixin.qq.com` 或搜狗 `link` 跳转；**禁止**搜狗搜索页。缺链时 UI 显示「原文链接待收录」，不删文章行。
+**链接策略：**「打开原文」仅 `mp.weixin.qq.com`（可验证）或 `weixin.sogou.com/link`；**禁止**搜狗搜索页。不伪造 URL。
 
-## 本地运行
+## 本地开发
+
+### 仅 UI（JSON 回退）
 
 ```bash
 npm install
 npm run dev
 ```
 
-打开 [http://localhost:3000](http://localhost:3000)。
+打开 http://localhost:3000。读写公众号**不会持久化**（无 D1 绑定）。
 
-- `/` 扫描列表
-- `/scans/2026-09-12` 一次扫描：筛选 + 列表 + 阅读面板
-- `/scans/2026-09-12?article=2026-09-12-weread-001` 打开指定文章（刷新可复现）
-- `/about` 数据说明
-- `/accounts` 追踪公众号与下载说明
-- `/llms.txt` GEO 摘要
-- `/sitemap.xml` / `/robots.txt`
+### 带 D1（推荐，与生产一致）
 
-环境变量（生产 SEO canonical）：`NEXT_PUBLIC_SITE_URL=https://daily-news-tee3.vercel.app`
-
-生产构建：
+1. 安装依赖后，在 `wrangler.jsonc` 填入 D1 `database_id`（见下方「首次 Cloudflare 部署」）。
+2. 迁移 + 种子：
 
 ```bash
-npm run build
-npm start
+npm run db:migrate:local
+npm run db:seed:local
 ```
 
-## 数据
-
-目录 `data/index.json`：
-
-```json
-{
-  "version": "1.0.0",
-  "updatedAt": "2026-09-12T09:00:00+08:00",
-  "scans": [
-    {
-      "id": "2026-09-12",
-      "date": "2026-09-12",
-      "title": "云原生训推 / 算力成本 / 模型测评",
-      "sources": ["weread"],
-      "articleCount": 90,
-      "notes": "可选"
-    }
-  ],
-  "articles": [
-    {
-      "id": "2026-09-12-weread-001",
-      "scanDate": "2026-09-12",
-      "channel": "微信公众号",
-      "query": "vLLM SGLang",
-      "title": "标题",
-      "account": "账号",
-      "publishedLabel": "27分钟前",
-      "summary": "摘要",
-      "url": "https://mp.weixin.qq.com/s/...",
-      "hasDirectLink": true
-    }
-  ]
-}
-```
-
-样例扫描日期 `2026-09-12`，来源微信读书（weread），约 90 篇，检索词覆盖：
-
-- vLLM SGLang
-- PD 分离 Prefill Decode
-- Kueue Volcano Gang Scheduling
-- GPU 算力成本 MFU
-- 昇腾 国产卡 Day0
-- 模型评测 benchmark 独立复现
-
-其中 `2026-09-12-weread-001` 为指定种子文（水金聊投资 / SGLang 和 vLLM）。后续可以用完整数据集整文件替换 `data/index.json`。
-
-重新生成样例（会覆盖 `data/index.json`）：
+3. 预览 OpenNext + 本地 D1：
 
 ```bash
-node scripts/seed-catalog.mjs
+npm run dev:cf
 ```
 
-## 追加一次扫描
+或 `npx wrangler pages dev`（在 `npm run build:cf` 之后）。
 
-1. 在 `scans` 里加一条，`id` 与 `date` 建议同一天，例如 `2026-09-13`。
-2. 把当天的文章追加到 `articles`，`scanDate` 对上扫描日期；`id` 建议 `日期-来源-序号`。
-3. `articleCount` 写成当天篇数。
-4. 本地 `npm run dev` 看 `/scans/<id>`，再 `npm run build`。
+强制只用 JSON（调试）：`TRACK_SCAN_USE_JSON=1 npm run dev`
 
-阅读面板的「打开原文」只在 `hasDirectLink === true` 且 `url` 非空时出现。
+## Cloudflare D1  schema（摘要）
 
-文章高亮与面板内容由服务端页面 `app/scans/[scanId]/page.tsx` 读取 `searchParams.article`，再把 `selectedId` 传给列表和面板。列表行是：
+| 表 | 说明 |
+|----|------|
+| `accounts` | `slug` PK（中文名 → base64url）、`name`、`added_at`、`notes` |
+| `scans` | 扫描批次 `id`、`scan_date`、`title`、`sources_json`、`notes` |
+| `articles` | 目录条目：`id`、`scan_id`、`title`、`account`、`url`、`query`…；索引：`scan_id`、`account`、`title`、`url` |
+| `catalog_meta` | `version` / `updatedAt` |
 
-```tsx
-<Link href={`/scans/${scanId}?article=${encodeURIComponent(id)}`} scroll={false}>
-```
+迁移文件：`migrations/0001_init.sql`
 
-## 部署到 Vercel
+## 首次 Cloudflare 部署（用户必做）
 
-1. 用 [Vercel](https://vercel.com/new) 导入 `zhuima/daily-news`。
-2. Framework Preset 选 Next.js，根目录保持仓库根（不要填子目录）。
-3. Build Command：`npm run build`；Output 用 Next.js 默认即可。
-4. 建议设置 `NEXT_PUBLIC_SITE_URL` 为生产域名（canonical / sitemap）。数据在构建时打进产物。
-
-CLI：
+在已登录 `wrangler` 的机器上：
 
 ```bash
-npx vercel
+# 1. 创建 D1
+npx wrangler d1 create track-scan-db
+# 复制输出的 database_id 到 wrangler.jsonc → d1_databases[0].database_id
+
+# 2. 应用 schema
+npm run db:migrate:remote
+
+# 3. 导入当前仓库 JSON 种子（后续可用真实 ~49 URL 目录替换 data/index.json 再跑）
+npm run db:seed:remote
+
+# 4. Pages 项目 Secrets（Dashboard → Workers & Pages → 项目 → Settings → Variables）
+#    ACCOUNTS_ADMIN_TOKEN = 管理口令
+#    NEXT_PUBLIC_SITE_URL = https://你的域名
+
+# 5. 构建并部署
+npm run build:cf
+npm run deploy:cf
 ```
 
-## 公众号追踪与正文下载
+绑定名称必须为 **`DB`**（与 `wrangler.jsonc` 一致）。OpenNext 产物目录：`.open-next/`。
 
-- 追踪列表：页面 `/accounts`（Vercel KV 持久化；`data/accounts.json` 为种子）
-- 环境变量：`KV_REST_API_URL`、`KV_REST_API_TOKEN`（Upstash Redis）、`ACCOUNTS_ADMIN_TOKEN`（管理口令）
-- 单篇正文：[x-fetcher](https://github.com/zhuima/x-fetcher) 的 `fetch_wechat.py`（**单 mp URL**，非公众号历史）
-- 批量（仅已收录链接）：
+## `/accounts` 管理
+
+- **增删公众号** → D1 `accounts` 表（需 `ACCOUNTS_ADMIN_TOKEN`）
+- **导入文章链接**：上传 wechatDownload `export_article_data` 的 CSV/JSON → `POST /api/accounts/import`（仅链接，不批量抓正文）
+- 说明：[docs/wechat-download-import.md](docs/wechat-download-import.md)
+
+## 正文下载（本地）
+
+[x-fetcher](https://github.com/zhuima/x-fetcher) 单篇 mp URL：
 
 ```bash
 export X_FETCHER_PATH=/path/to/x-fetcher
 node scripts/download-account-bodies.mjs --account "水金聊投资"
 ```
 
-输出：`data/downloads/<slug>/`
+## 脚本
+
+| 命令 | 作用 |
+|------|------|
+| `npm run build` | Next 标准构建（Vercel / CI；D1 不可用时 JSON 回退） |
+| `npm run build:cf` | OpenNext for Cloudflare |
+| `npm run deploy:cf` | 部署到 Cloudflare Pages |
+| `npm run db:migrate:local` / `:remote` | D1 migrations |
+| `npm run db:seed:local` / `:remote` | 从 `data/*.json` 写入 D1 |
+| `node scripts/seed-catalog.mjs` | 仅 regenerates `data/index.json` 样例（Git 种子，非运行时 SoT） |
+
+## 路由
+
+- `/` `/scans/[scanId]` `/about` `/accounts` `/llms.txt` `/sitemap.xml` `/feed.xml`
 
 ## 技术栈
 
-Next.js App Router、TypeScript、Tailwind CSS、Zustand（仅筛选）、JSON-LD / sitemap / llms.txt。
+Next.js App Router、TypeScript、Tailwind v4、Zustand、Cloudflare D1、OpenNext Cloudflare、JSON-LD / SEO / GEO。

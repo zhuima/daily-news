@@ -1,6 +1,23 @@
-import catalogJson from "@/data/index.json";
 import type { Article, Catalog, Scan } from "@/lib/types";
-import { normalizeArticle } from "@/lib/articles";
+import { getDb } from "@/lib/db/client";
+import {
+  getAllArticlesFromDb,
+  getArticleFromDb,
+  getArticlesByScanFromDb,
+  getScanFromDb,
+  getScansFromDb,
+  loadCatalogFromDb,
+  searchArticlesInDb,
+} from "@/lib/db/catalog";
+import {
+  getJsonAllArticles,
+  getJsonArticle,
+  getJsonArticlesByScan,
+  getJsonCatalog,
+  getJsonScan,
+  getJsonScans,
+  searchJsonArticles,
+} from "@/lib/catalog-json";
 import {
   getTrackedAccountBySlug,
   listTrackedAccounts,
@@ -8,64 +25,81 @@ import {
 
 export type { TrackedAccount } from "@/lib/accounts-types";
 
-const catalog = catalogJson as Catalog;
-
-const articles = catalog.articles.map(normalizeArticle);
-
-export function getCatalog(): Catalog {
-  return {
-    ...catalog,
-    articles,
-    scans: catalog.scans.map((scan) => ({
-      ...scan,
-      articleCount: articles.filter((article) => article.scanDate === scan.date)
-        .length,
-    })),
-  };
+async function withDb<T>(
+  fromDb: (db: NonNullable<Awaited<ReturnType<typeof getDb>>>) => Promise<T>,
+  fromJson: () => T,
+): Promise<T> {
+  const db = await getDb();
+  if (db) {
+    try {
+      const scanProbe = await db
+        .prepare("SELECT id FROM scans LIMIT 1")
+        .first();
+      if (scanProbe) {
+        return await fromDb(db);
+      }
+    } catch {
+      /* D1 未 migrate 或本地空库 */
+    }
+  }
+  return fromJson();
 }
 
-export function getScans(): Scan[] {
-  return [...getCatalog().scans].sort((a, b) => b.date.localeCompare(a.date));
+export async function getCatalog(): Promise<Catalog> {
+  return withDb(loadCatalogFromDb, getJsonCatalog);
 }
 
-export function getScan(scanId: string): Scan | undefined {
-  return getCatalog().scans.find((scan) => scan.id === scanId);
+export async function getScans(): Promise<Scan[]> {
+  return withDb(getScansFromDb, getJsonScans);
 }
 
-export function getArticlesByScan(scanId: string): Article[] {
-  const scan = getScan(scanId);
-  if (!scan) return [];
-  return articles.filter((article) => article.scanDate === scan.date);
+export async function getScan(scanId: string): Promise<Scan | undefined> {
+  return withDb(
+    (db) => getScanFromDb(db, scanId),
+    () => getJsonScan(scanId),
+  );
 }
 
-export function getAllArticles(): Article[] {
-  return articles;
+export async function getArticlesByScan(scanId: string): Promise<Article[]> {
+  return withDb(
+    (db) => getArticlesByScanFromDb(db, scanId),
+    () => getJsonArticlesByScan(scanId),
+  );
 }
 
-export function getArticle(id: string | undefined): Article | undefined {
+export async function getAllArticles(): Promise<Article[]> {
+  return withDb(getAllArticlesFromDb, getJsonAllArticles);
+}
+
+export async function getArticle(
+  id: string | undefined,
+): Promise<Article | undefined> {
   if (!id) return undefined;
-  return articles.find((article) => article.id === id);
+  return withDb(
+    (db) => getArticleFromDb(db, id),
+    () => getJsonArticle(id),
+  );
 }
 
-export function searchArticles(query: string): Article[] {
-  const needle = query.trim().toLowerCase();
-  if (!needle) return articles;
-  return articles.filter((article) => {
-    const haystack =
-      `${article.title} ${article.account} ${article.summary} ${article.query} ${article.publishedLabel}`.toLowerCase();
-    return haystack.includes(needle);
-  });
+export async function searchArticles(query: string): Promise<Article[]> {
+  return withDb(
+    (db) => searchArticlesInDb(db, query),
+    () => searchJsonArticles(query),
+  );
 }
 
-export function getQueriesForScan(scanId: string): string[] {
+export async function getQueriesForScan(scanId: string): Promise<string[]> {
   const seen = new Set<string>();
-  for (const article of getArticlesByScan(scanId)) {
+  for (const article of await getArticlesByScan(scanId)) {
     if (article.query) seen.add(article.query);
   }
   return [...seen];
 }
 
-export function getArticlesByAccountName(accountName: string): Article[] {
+export async function getArticlesByAccountName(
+  accountName: string,
+): Promise<Article[]> {
+  const articles = await getAllArticles();
   return articles.filter((article) => article.account === accountName);
 }
 

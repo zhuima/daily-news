@@ -1,8 +1,8 @@
 import accountsSeed from "@/data/accounts.json";
 import type { AccountsDocument, TrackedAccount } from "@/lib/accounts-types";
 import { slugifyAccount } from "@/lib/slug";
-
-const KV_KEY = "track-scan:accounts:v1";
+import { getDb } from "@/lib/db/client";
+import { insertAccount, listAccountsFromDb } from "@/lib/db/accounts";
 
 function seedDocument(): AccountsDocument {
   const seed = accountsSeed as AccountsDocument;
@@ -15,51 +15,6 @@ function seedDocument(): AccountsDocument {
       addedAt: account.addedAt || new Date().toISOString().slice(0, 10),
     })),
   };
-}
-
-function kvConfigured(): boolean {
-  return Boolean(
-    process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN,
-  );
-}
-
-async function kvGet(): Promise<AccountsDocument | null> {
-  if (!kvConfigured()) return null;
-  const { kv } = await import("@vercel/kv");
-  return (await kv.get<AccountsDocument>(KV_KEY)) ?? null;
-}
-
-async function kvSet(doc: AccountsDocument): Promise<void> {
-  if (!kvConfigured()) {
-    throw new Error(
-      "KV_REST_API_URL / KV_REST_API_TOKEN 未配置，无法在 Vercel 上持久化公众号列表。请在 Vercel 集成 Upstash Redis。",
-    );
-  }
-  const { kv } = await import("@vercel/kv");
-  await kv.set(KV_KEY, doc);
-}
-
-export async function readAccountsDocument(): Promise<AccountsDocument> {
-  const cached = await kvGet();
-  if (cached?.accounts?.length) {
-    return normalizeDocument(cached);
-  }
-  const seed = seedDocument();
-  if (kvConfigured()) {
-    await kvSet(seed);
-  }
-  return seed;
-}
-
-export async function writeAccountsDocument(
-  doc: AccountsDocument,
-): Promise<AccountsDocument> {
-  const next = normalizeDocument({
-    ...doc,
-    updatedAt: new Date().toISOString(),
-  });
-  await kvSet(next);
-  return next;
 }
 
 export function normalizeDocument(doc: AccountsDocument): AccountsDocument {
@@ -89,18 +44,47 @@ export function normalizeDocument(doc: AccountsDocument): AccountsDocument {
   };
 }
 
-export function assertUniqueSlug(
-  accounts: TrackedAccount[],
-  slug: string,
-  exceptSlug?: string,
-): void {
-  if (accounts.some((a) => a.slug === slug && a.slug !== exceptSlug)) {
-    throw new Error(`slug 已存在：${slug}`);
+export async function readAccountsDocument(): Promise<AccountsDocument> {
+  const db = await getDb();
+  if (db) {
+    try {
+      const accounts = await listAccountsFromDb(db);
+      if (accounts.length > 0) {
+        return {
+          version: "1.0.0",
+          updatedAt: new Date().toISOString(),
+          accounts,
+        };
+      }
+    } catch {
+      /* D1 未 migrate 或 build 环境无 schema */
+    }
   }
+  return normalizeDocument(seedDocument());
 }
 
-export function proposeSlug(name: string, custom?: string): string {
-  const trimmed = custom?.trim();
-  if (trimmed) return trimmed.replace(/=+$/, "");
-  return slugifyAccount(name).replace(/=+$/, "");
+export async function writeAccountsDocument(
+  doc: AccountsDocument,
+): Promise<AccountsDocument> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error(
+      "D1 未绑定：请在 Cloudflare Pages（OpenNext）或 wrangler dev 下运行，并执行 migrations + seed。本地纯 next dev 仅可读 JSON 种子。",
+    );
+  }
+  const next = normalizeDocument({
+    ...doc,
+    updatedAt: new Date().toISOString(),
+  });
+  await db.prepare("DELETE FROM accounts").run();
+  for (const account of next.accounts) {
+    await insertAccount(db, {
+      name: account.name,
+      slug: account.slug,
+      notes: account.notes,
+      addedAt: account.addedAt,
+    });
+  }
+  return next;
 }
+

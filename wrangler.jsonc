@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "daily-news",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "main": ".open-next/worker.js",
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "daily-news"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "track-scan-db",
+      "database_id": "REPLACE_WITH_WRANGLER_D1_CREATE_OUTPUT"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://daily-news.example.com"
+  }
+}

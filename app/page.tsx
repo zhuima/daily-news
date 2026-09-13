@@ -38,10 +38,12 @@ const faq = [
   },
 ];
 
-export default function HomePage() {
-  const scans = getScans();
-  const catalog = getCatalog();
-  const articles = getAllArticles();
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const scans = await getScans();
+  const catalog = await getCatalog();
+  const articles = await getAllArticles();
   const latestScan = scans[0];
   const featured = featuredLinkedArticle(articles);
   const featuredLink = featured ? resolveArticleLink(featured) : null;
