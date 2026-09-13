@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArticleEngagement } from "@/components/ArticleEngagement";
 import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { ArticleLinkActions } from "@/components/ArticleLinkActions";
+import { OriginalArticleLink } from "@/components/OriginalArticleLink";
+import { hasEngagementMetrics } from "@/lib/engagement/types";
 import { resolveArticleLink } from "@/lib/articles";
 import type { Article } from "@/lib/types";
 
@@ -33,6 +35,14 @@ export function ReadingPanel({
   }
 
   const link = resolveArticleLink(article);
+  const showEngagementHint =
+    !hasEngagementMetrics({
+      readCount: article.readCount,
+      likeCount: article.likeCount,
+      oldLikeCount: article.oldLikeCount,
+      commentCount: article.commentCount,
+      shareCount: article.shareCount,
+    });
 
   return (
     <article className="flex h-full flex-col p-7 sm:p-9">
@@ -55,6 +65,11 @@ export function ReadingPanel({
         {article.title}
       </h2>
       <ArticleEngagement article={article} className="mt-3" />
+      {showEngagementHint ? (
+        <p className="mt-2 text-[11px] leading-snug text-muted">
+          互动数据需从 wechatDownload 导出导入
+        </p>
+      ) : null}
       <dl className="mt-4 grid gap-3 rounded-sm border border-line bg-canvas px-4 py-3 text-sm sm:grid-cols-2">
         <div>
           <dt className="text-xs text-marrs">公众号</dt>
@@ -71,19 +86,14 @@ export function ReadingPanel({
           <dd className="mt-1 text-ink">{article.query}</dd>
         </div>
         <div className="sm:col-span-2">
-          <dt className="text-xs text-marrs">原文链接</dt>
-          <dd className="mt-1 text-ink">
+          <dt className="text-xs text-marrs">原文</dt>
+          <dd className="mt-1">
             {link ? (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="break-all text-marrs hover:text-marrs-deep"
-              >
-                {link.href}
-              </a>
+              <OriginalArticleLink article={article} />
             ) : (
-              "待收录（不可用搜索页代替）"
+              <span className="text-sm text-muted">
+                原文链接待收录（不可用搜索页代替）
+              </span>
             )}
           </dd>
         </div>
