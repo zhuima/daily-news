@@ -33,7 +33,7 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="interactive focus-ring flex h-11 w-11 items-center justify-center text-ink hover:bg-paper hover:text-marrs"
+        className="interactive focus-ring relative z-50 flex h-11 w-11 items-center justify-center text-ink hover:bg-paper hover:text-marrs"
         style={{
           borderRadius: "var(--radius-inner)",
           boxShadow: "inset 0 0 0 1px var(--line)",
@@ -69,7 +69,7 @@ export function MobileNav() {
       {open ? (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-ink/25 backdrop-blur-[2px]"
+          className="fixed inset-x-0 top-14 bottom-0 z-40 bg-ink/25 backdrop-blur-[2px]"
           aria-label="关闭菜单"
           onClick={() => setOpen(false)}
         />

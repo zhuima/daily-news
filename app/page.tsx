@@ -85,7 +85,7 @@ export default async function HomePage() {
       >
         <div className="editorial-container grid gap-12 pt-12 pb-16 sm:pt-16 sm:pb-20 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div>
-            <p className="type-kicker text-white/72">
+            <p className="type-kicker text-white/80">
               关键词扫描归档
             </p>
             <h1
