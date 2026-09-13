@@ -11,7 +11,7 @@ export function getSiteUrl(): string {
   if (fromEnv) {
     return fromEnv.startsWith("http") ? fromEnv : `https://${fromEnv}`;
   }
-  return "https://daily-news-tee3.vercel.app";
+  return "https://news.affdirs.com";
 }
 
 export function absoluteUrl(path: string): string {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
+import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { resolveArticleLink } from "@/lib/articles";
 import { getArticlesByAccountSlug, getTrackedAccount } from "@/lib/data";
 import { buildPageMetadata } from "@/lib/seo";
@@ -83,14 +84,20 @@ export default async function AccountDetailPage({
             return (
               <li key={article.id} className="px-5 py-4">
                 <article>
-                  <h3 className="text-[15px] leading-6 text-ink">
-                    <Link
-                      href={`/scans/${article.scanDate}?article=${encodeURIComponent(article.id)}`}
-                      className="hover:text-marrs"
-                    >
-                      {article.title}
-                    </Link>
-                  </h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-w-0 flex-1 text-[15px] leading-6 text-ink">
+                      <Link
+                        href={`/scans/${article.scanDate}?article=${encodeURIComponent(article.id)}`}
+                        className="hover:text-marrs"
+                      >
+                        {article.title}
+                      </Link>
+                    </h3>
+                    <ArticleScoreChip article={article} className="shrink-0" />
+                  </div>
+                  {article.scoreReason ? (
+                    <p className="mt-1 text-[10px] text-muted">{article.scoreReason}</p>
+                  ) : null}
                   <p className="mt-1 text-sm text-muted">
                     <time dateTime={article.scanDate}>{article.publishedLabel}</time>
                     <span className="mx-2">·</span>

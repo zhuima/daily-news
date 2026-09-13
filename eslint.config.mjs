@@ -9,8 +9,10 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".open-next/**",
     "out/**",
     "build/**",
+    "scripts/rescore-generated.sql",
     "next-env.d.ts",
   ]),
 ]);

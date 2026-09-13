@@ -1,5 +1,6 @@
 import type { Article, Catalog, Scan } from "@/lib/types";
 import type { TrackScanDb } from "@/lib/db/client";
+import { computeStoredScore } from "@/lib/db/article-score";
 import {
   articleRowToArticle,
   scanRowToScan,
@@ -143,13 +144,31 @@ export async function upsertArticleUrl(
   const hasDirect = allowed ? 1 : 0;
   const url = allowed ? input.url.trim() : "";
 
+  const scorePayload = {
+    title: input.title,
+    summary: input.summary ?? "",
+    query: input.query ?? "",
+    url,
+    publishedLabel: input.publishedLabel ?? "",
+    hasDirectLink: hasDirect === 1,
+  };
+  const { score, scoreReason } = computeStoredScore(scorePayload);
+
   if (input.id) {
     await db
       .prepare(
-        `UPDATE articles SET url = ?, has_direct_link = ?, account_slug = COALESCE(?, account_slug)
+        `UPDATE articles SET url = ?, has_direct_link = ?, account_slug = COALESCE(?, account_slug),
+         score = ?, score_reason = ?
          WHERE id = ?`,
       )
-      .bind(url, hasDirect, input.accountSlug ?? null, input.id)
+      .bind(
+        url,
+        hasDirect,
+        input.accountSlug ?? null,
+        score,
+        scoreReason,
+        input.id,
+      )
       .run();
     return input.id;
   }
@@ -159,8 +178,8 @@ export async function upsertArticleUrl(
     .prepare(
       `INSERT INTO articles (
         id, scan_id, scan_date, channel, query, title, account, account_slug,
-        published_label, summary, url, has_direct_link, source
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wechat-export')`,
+        published_label, summary, url, has_direct_link, source, score, score_reason
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'wechat-export', ?, ?)`,
     )
     .bind(
       id,
@@ -175,6 +194,8 @@ export async function upsertArticleUrl(
       input.summary ?? "",
       url,
       hasDirect,
+      score,
+      scoreReason,
     )
     .run();
   return id;

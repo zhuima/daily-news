@@ -1,4 +1,5 @@
 import type { Article } from "@/lib/types";
+import { scoreArticleQuality } from "@/lib/scoring/content-quality-score";
 
 const SYNTHETIC_MP_PATH =
   /^https?:\/\/mp\.weixin\.qq\.com\/s\/(?:20\d{2}-\d{2}-\d{2}-weread-\d+|[^?]+)$/i;
@@ -43,12 +44,22 @@ export function resolveArticleLink(article: Article): ArticleLink | null {
 
 export function normalizeArticle(article: Article): Article {
   const allowed = isAllowedArticleUrl(article.url);
-  return {
+  const base = {
     ...article,
     account: article.account?.trim() || "未知公众号",
     publishedLabel: article.publishedLabel?.trim() || "时间待补",
     url: allowed ? article.url.trim() : "",
     hasDirectLink: allowed,
+  };
+  const computed = scoreArticleQuality({
+    title: base.title,
+    summary: base.summary,
+    publishedLabel: base.publishedLabel,
+  });
+  return {
+    ...base,
+    score: article.score ?? computed.score,
+    scoreReason: article.scoreReason ?? computed.scoreReason,
   };
 }
 

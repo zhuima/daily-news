@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import { ArticleLinkActions } from "@/components/ArticleLinkActions";
 import { resolveArticleLink } from "@/lib/articles";
 import type { Article } from "@/lib/types";
@@ -38,13 +39,16 @@ export function ReadingPanel({
         <p className="font-display text-xs tracking-[0.2em] text-marrs uppercase">
           {article.channel}
         </p>
-        <Link
-          href={closeHref}
-          scroll={false}
-          className="text-xs text-muted hover:text-marrs"
-        >
-          关闭
-        </Link>
+        <div className="flex flex-col items-end gap-2">
+          <ArticleScoreChip article={article} showReason />
+          <Link
+            href={closeHref}
+            scroll={false}
+            className="text-xs text-muted hover:text-marrs"
+          >
+            关闭
+          </Link>
+        </div>
       </div>
       <h2 className="mt-4 text-[1.65rem] leading-snug tracking-tight text-ink">
         {article.title}

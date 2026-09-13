@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ArticleScoreChip } from "@/components/ArticleScoreChip";
 import type { Article } from "@/lib/types";
 
 export function HomeSearch({ articles }: { articles: Article[] }) {
@@ -44,8 +45,9 @@ export function HomeSearch({ articles }: { articles: Article[] }) {
                 <li key={article.id}>
                   <Link
                     href={`/scans/${article.scanDate}?article=${encodeURIComponent(article.id)}`}
-                    className="block py-3 transition-colors hover:text-marrs"
+                    className="flex items-start justify-between gap-3 py-3 transition-colors hover:text-marrs"
                   >
+                    <div className="min-w-0 flex-1">
                     <p className="text-[15px] leading-6 text-ink">{article.title}</p>
                     <p className="mt-1 text-xs text-muted">
                       {article.account}
@@ -54,6 +56,8 @@ export function HomeSearch({ articles }: { articles: Article[] }) {
                       <span className="mx-1.5">·</span>
                       {article.query}
                     </p>
+                    </div>
+                    <ArticleScoreChip article={article} className="shrink-0 pt-0.5" />
                   </Link>
                 </li>
               ))}

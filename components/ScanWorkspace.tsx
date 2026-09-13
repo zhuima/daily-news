@@ -26,6 +26,7 @@ export function ScanWorkspace({
 }) {
   const query = useFilters((s) => s.query);
   const search = useFilters((s) => s.search);
+  const sort = useFilters((s) => s.sort);
   const reset = useFilters((s) => s.reset);
   const setQuery = useFilters((s) => s.setQuery);
 
@@ -38,14 +39,20 @@ export function ScanWorkspace({
 
   const visible = useMemo(() => {
     const needle = search.trim().toLowerCase();
-    return articles.filter((article) => {
+    const filtered = articles.filter((article) => {
       if (query && article.query !== query) return false;
       if (!needle) return true;
       const haystack =
         `${article.title} ${article.account} ${article.summary} ${article.publishedLabel}`.toLowerCase();
       return haystack.includes(needle);
     });
-  }, [articles, query, search]);
+    if (sort === "score-desc") {
+      return [...filtered].sort(
+        (a, b) => (b.score ?? 0) - (a.score ?? 0),
+      );
+    }
+    return filtered;
+  }, [articles, query, search, sort]);
 
   const closeHref = `/scans/${scan.id}`;
 
