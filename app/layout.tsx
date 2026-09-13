@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Source_Serif_4, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -13,17 +13,6 @@ import "./globals.css";
 
 const geist = Geist({
   variable: "--font-sans-stack",
-  subsets: ["latin"],
-});
-
-const newsreader = Newsreader({
-  variable: "--font-display-stack",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-});
-
-const sourceSerif = Source_Serif_4({
-  variable: "--font-serif-stack",
   subsets: ["latin"],
 });
 
@@ -57,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#01847E",
+  themeColor: "#f6f5f2",
   width: "device-width",
   initialScale: 1,
 };
@@ -65,10 +54,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const siteUrl = getSiteUrl();
   return (
-    <html
-      lang="zh-CN"
-      className={`${geist.variable} ${newsreader.variable} ${sourceSerif.variable} h-full antialiased`}
-    >
+    <html lang="zh-CN" className={`${geist.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-canvas text-ink">
         <a href="#main-content" className="skip-link">
           跳到主要内容

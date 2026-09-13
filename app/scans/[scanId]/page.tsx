@@ -135,7 +135,7 @@ export default async function ScanPage({
   return (
     <main className="flex flex-1 flex-col">
       <JsonLd data={{ "@context": "https://schema.org", "@graph": graph }} />
-      <div className="editorial-container pt-6 pb-2">
+      <div className="docs-container pt-6 pb-0">
         <Breadcrumbs
           items={[
             { label: "首页", href: "/" },

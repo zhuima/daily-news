@@ -11,22 +11,19 @@ export function FilterBar({ queries }: { queries: string[] }) {
   const setSort = useFilters((s) => s.setSort);
 
   return (
-    <div className="space-y-5">
-      <label className="block">
-        <span className="text-sm font-medium text-ink">关键词搜索</span>
-        <span className="mt-1 block text-sm text-muted">
-          在当前扫描内搜索标题、公众号或摘要
-        </span>
+    <div className="space-y-4">
+      <label className="block max-w-md">
+        <span className="text-[13px] font-medium text-ink">在本次扫描中搜索</span>
         <input
           type="search"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="输入关键词，例如 Serving、MFU、评测"
-          className="field mt-3"
+          placeholder="标题、公众号或摘要"
+          className="field mt-2"
         />
       </label>
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="mr-1 text-[13px] font-medium text-muted">检索词</span>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="mr-1 text-[12px] text-muted">检索词</span>
         <QueryChip
           active={query === ""}
           onClick={() => setQuery("")}
@@ -41,8 +38,8 @@ export function FilterBar({ queries }: { queries: string[] }) {
           />
         ))}
       </div>
-      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-5">
-        <span className="mr-1 text-[13px] font-medium text-muted">排序</span>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="mr-1 text-[12px] text-muted">排序</span>
         <QueryChip
           active={sort === "default"}
           onClick={() => setSort("default")}

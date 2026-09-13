@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 const nav = [
-  { href: "/", label: "扫描归档" },
-  { href: "/accounts", label: "追踪公众号" },
-  { href: "/about", label: "关于与数据" },
+  { href: "/", label: "扫描" },
+  { href: "/accounts", label: "公众号" },
+  { href: "/about", label: "关于" },
 ] as const;
 
 function isActive(pathname: string, href: string) {
@@ -33,11 +33,7 @@ export function MobileNav() {
     <div className="md:hidden">
       <button
         type="button"
-        className="interactive focus-ring relative z-50 flex h-11 w-11 items-center justify-center text-ink hover:bg-paper hover:text-marrs"
-        style={{
-          borderRadius: "var(--radius-inner)",
-          boxShadow: "inset 0 0 0 1px var(--line)",
-        }}
+        className="focus-ring relative z-50 flex h-9 w-9 items-center justify-center text-ink hover:text-marrs"
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={open ? "关闭菜单" : "打开菜单"}
@@ -46,22 +42,18 @@ export function MobileNav() {
         <span className="sr-only">{open ? "关闭" : "菜单"}</span>
         <svg
           aria-hidden
-          width="22"
-          height="22"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.75"
+          strokeWidth="1.6"
           strokeLinecap="round"
         >
           {open ? (
-            <>
-              <path d="M6 6l12 12M18 6L6 18" />
-            </>
+            <path d="M6 6l12 12M18 6L6 18" />
           ) : (
-            <>
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </>
+            <path d="M4 7h16M4 12h16M4 17h16" />
           )}
         </svg>
       </button>
@@ -69,7 +61,7 @@ export function MobileNav() {
       {open ? (
         <button
           type="button"
-          className="fixed inset-x-0 top-14 bottom-0 z-40 bg-ink/25 backdrop-blur-[2px]"
+          className="fixed inset-x-0 top-14 bottom-0 z-40 bg-ink/20"
           aria-label="关闭菜单"
           onClick={() => setOpen(false)}
         />
@@ -80,13 +72,11 @@ export function MobileNav() {
         role="dialog"
         aria-modal="true"
         aria-label="站点导航"
-        className={`fixed inset-x-0 top-[3.5rem] z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-line bg-canvas shadow-[var(--shadow-ink)] transition duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          open
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-2 opacity-0"
+        className={`fixed inset-x-0 top-14 z-50 border-b border-line bg-paper ${
+          open ? "" : "pointer-events-none hidden"
         }`}
       >
-        <nav className="editorial-container flex flex-col gap-1 py-5">
+        <nav className="docs-container flex flex-col py-3">
           {nav.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -95,12 +85,9 @@ export function MobileNav() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 onClick={() => setOpen(false)}
-                className={`interactive focus-ring px-4 py-3.5 text-base font-medium ${
-                  active
-                    ? "bg-marrs text-white"
-                    : "text-ink hover:bg-paper hover:text-marrs"
+                className={`focus-ring py-2.5 text-[15px] ${
+                  active ? "text-marrs" : "text-ink hover:text-marrs"
                 }`}
-                style={{ borderRadius: "var(--radius-inner)" }}
               >
                 {item.label}
               </Link>
@@ -109,10 +96,9 @@ export function MobileNav() {
           <Link
             href="/#site-search"
             onClick={() => setOpen(false)}
-            className="interactive focus-ring mt-2 border border-line bg-paper px-4 py-3.5 text-base text-ink hover:border-marrs/40 hover:text-marrs"
-            style={{ borderRadius: "var(--radius-inner)" }}
+            className="focus-ring py-2.5 text-[15px] text-ink hover:text-marrs"
           >
-            全站搜索
+            搜索
           </Link>
         </nav>
       </div>

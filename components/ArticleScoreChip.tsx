@@ -11,16 +11,15 @@ export function ArticleScoreChip({
 }) {
   const score = article.score ?? 0;
   return (
-    <span className={`inline-flex flex-col gap-0.5 ${className}`}>
+    <span className={`inline-flex flex-col items-end gap-0.5 ${className}`}>
       <span
-        className="inline-flex items-center bg-marrs px-2 py-0.5 text-[11px] font-medium tabular-nums text-white"
-        style={{ borderRadius: "var(--radius-inner)" }}
+        className="text-[12px] tabular-nums text-muted"
         title={article.scoreReason ?? "质量分"}
       >
         质量分 {score}
       </span>
       {showReason && article.scoreReason ? (
-        <span className="text-[10px] leading-snug text-muted">
+        <span className="max-w-[16rem] text-right text-[11px] leading-snug text-muted">
           {article.scoreReason}
         </span>
       ) : null}
